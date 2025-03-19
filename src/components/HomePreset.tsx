@@ -48,7 +48,7 @@ export default function HomePreset() {
           spaceBetween={50}
           slidesPerView={1}
           loop={true}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          autoplay={{ delay: 7000, disableOnInteraction: false }}
           modules={[Autoplay]}
         >
           {presets.map(
@@ -134,8 +134,11 @@ export default function HomePreset() {
                       >
                         <PlayIcon className="w-5  h-5" /> 바로 시작하기
                       </motion.button>
-                      <button className="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-200 transition-all">
-                        미리보기
+                      <button
+                        onClick={() => router.push("/story/new")}
+                        className="flex-1 bg-gray-100 text-gray-700 py-3 cursor-pointer px-6 rounded-lg font-medium hover:bg-gray-200 transition-all"
+                      >
+                        나만의 이야기 만들기
                       </button>
                     </div>
                   </motion.div>

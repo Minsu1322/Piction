@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
 import OpenAI from "openai";
 import ChoiceButtons from "@/components/ChoiceButtons";
@@ -21,14 +21,76 @@ export default function StoryGenerator() {
   const [storyEnded, setStoryEnded] = useState<"success" | "failure" | null>(
     null
   );
+  const initialRenderRef = useRef(true);
 
   useEffect(() => {
-    if (worldSetting && storyLength && !initialized) {
-      setInitialized(true);
-      generateStory();
+    if (worldSetting && storyLength && initialRenderRef.current) {
+      initialRenderRef.current = false; // 한 번만 실행되도록 설정
+      generateInitialStory();
     }
   }, [worldSetting, storyLength]);
 
+  const generateInitialStory = async () => {
+    setLoading(true);
+    setErrorMessage("");
+
+    const promptData = `세계관: ${worldSetting}\n단어 수: ${storyLength}
+  
+  지시사항:
+  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
+  2. 스토리를 현대 웹소설 스타일로 작성하라. 등장인물 간 대화는 큰따옴표(")를 사용하여 표현하라.
+  3. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
+  4. 선택지 중 하나는 위험하거나 도전적인 선택이 되도록 하라.
+  5. 스토리는 흥미진진하고 예측 불가능한 요소를 포함해야 한다.`;
+
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [{ role: "user", content: promptData }],
+        temperature: 0.8,
+        max_tokens: Math.min(storyLength * 50, 2048),
+      });
+
+      let generatedText = response.choices[0]?.message?.content?.trim();
+      if (!generatedText) {
+        setErrorMessage("⚠️ 스토리를 생성하지 못했습니다. 다시 시도해주세요.");
+        setLoading(false);
+        return;
+      }
+
+      // 스토리와 선택지 분리 개선
+      const choicePattern = /(\n\d+\.|\n\-|\n\d+\))\s+.+/g;
+      const matches = generatedText.match(choicePattern);
+
+      let newStory = generatedText;
+      let newChoices: string[] = [];
+
+      if (matches && matches.length > 0) {
+        // 선택지 추출
+        newChoices = matches.map((choice) => choice.trim());
+
+        // 스토리에서 선택지 부분 제거
+        for (const choice of matches) {
+          newStory = newStory.replace(choice, "");
+        }
+        newStory = newStory.trim();
+      }
+
+      // 초기 스토리 설정
+      setStory(newStory);
+      setChoices(newChoices.length > 0 ? newChoices : []);
+      setInitialized(true);
+
+      // 초기 스토리는 storyProgress를 증가시키지 않음
+    } catch (error) {
+      console.error("❌ API 요청 실패:", error);
+      setErrorMessage("⚠️ 서버 오류 발생! 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //선택지를 선택했을떄 사용
   const generateStory = async (userChoice?: string) => {
     setLoading(true);
     setErrorMessage("");
@@ -38,42 +100,42 @@ export default function StoryGenerator() {
 
     const promptData = userChoice
       ? `이전 스토리:\n${story}\n\n사용자가 "${userChoice}"를 선택했다.
-
-지시사항:
-1. 이야기를 ${isFinalStep ? "완결되도록 마무리하고" : "이어가고"} ${
+  
+  지시사항:
+  1. 이야기를 ${isFinalStep ? "완결되도록 마무리하고" : "이어가고"} ${
           isFinalStep
             ? "더 이상의 선택지는 제공하지 마라."
             : "반드시 2~3개의 새로운 선택지를 제공해라."
         }
-2. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
-3. 대화체를 적극적으로 활용하라. 주인공과 등장인물 간의 대화는 큰따옴표(")로 감싸고, 상황 설명과 지문은 자연스럽게 섞어라.
-4. 몰입감을 높이기 위해 주인공의 생각을 이탤릭체(예: *이게 정말 가능할까...?*)로 표현하라.
-5. 새로운 선택지를 제공할 때는 웹소설 스타일로 작성하라. 예를 들어:
-
-[선택지]  
-"이곳을 떠나야 해. 당장." — 더 이상 머뭇거릴 시간이 없다.  
-"아니, 기다려봐. 무언가 이상해." — 뭔가 놓친 게 있을지도 모른다.  
-"누군가 있다...!" — 낯선 기척이 느껴진다. 숨을 죽일 것인가?
-
-6. 예측 불가능한 전개와 위험한 상황을 과감하게 포함시켜라.
-7. ${
-          randomEventChance < 25
-            ? "갑작스러운 위기나 예상치 못한 사건을 발생시켜라."
-            : "이야기의 자연스러운 흐름을 유지하되, 단조롭지 않게 전개하라."
-        }
-8. ${
-          randomEventChance < 10 && !isFinalStep
-            ? "주인공이 죽거나 치명적 위기에 처할 가능성을 고려하라. 만약 주인공이 죽게 된다면, 마지막에 '[주인공 사망]'이라고 명시하라."
-            : "주인공의 생존을 보장하지 말고, 선택에 따른 결과를 사실적으로 반영하라."
-        }`
+  2. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
+  3. 대화체를 적극적으로 활용하라. 주인공과 등장인물 간의 대화는 큰따옴표(")로 감싸고, 상황 설명과 지문은 자연스럽게 섞어라.
+  4. 몰입감을 높이기 위해 주인공의 생각을 이탤릭체(예: *이게 정말 가능할까...?*)로 표현하라.
+  5. 새로운 선택지를 제공할 때는 웹소설 스타일로 작성하라. 예를 들어:
+  
+  [선택지]  
+  "이곳을 떠나야 해. 당장." — 더 이상 머뭇거릴 시간이 없다.  
+  "아니, 기다려봐. 무언가 이상해." — 뭔가 놓친 게 있을지도 모른다.  
+  "누군가 있다...!" — 낯선 기척이 느껴진다. 숨을 죽일 것인가?
+  
+  6. 예측 불가능한 전개와 위험한 상황을 과감하게 포함시켜라.
+  7. ${
+    randomEventChance < 25
+      ? "갑작스러운 위기나 예상치 못한 사건을 발생시켜라."
+      : "이야기의 자연스러운 흐름을 유지하되, 단조롭지 않게 전개하라."
+  }
+  8. ${
+    randomEventChance < 10 && !isFinalStep
+      ? "주인공이 죽거나 치명적 위기에 처할 가능성을 고려하라. 만약 주인공이 죽게 된다면, 마지막에 '[주인공 사망]'이라고 명시하라."
+      : "주인공의 생존을 보장하지 말고, 선택에 따른 결과를 사실적으로 반영하라."
+  }`
       : `세계관: ${worldSetting}\n단어 수: ${storyLength}
-
-지시사항:
-1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
-2. 스토리를 현대 웹소설 스타일로 작성하라. 등장인물 간 대화는 큰따옴표(")를 사용하여 표현하라.
-3. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
-4. 선택지 중 하나는 위험하거나 도전적인 선택이 되도록 하라.
-5. 스토리는 흥미진진하고 예측 불가능한 요소를 포함해야 한다.`;
+  
+  지시사항:
+  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
+  2. 스토리를 현대 웹소설 스타일로 작성하라. 등장인물 간 대화는 큰따옴표(")를 사용하여 표현하라.
+  3. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
+  4. 선택지 중 하나는 위험하거나 도전적인 선택이 되도록 하라.
+  5. 스토리는 흥미진진하고 예측 불가능한 요소를 포함해야 한다.`;
 
     try {
       const response = await openai.chat.completions.create({
@@ -117,17 +179,20 @@ export default function StoryGenerator() {
       // 최초 생성인 경우와 이어서 생성하는 경우 구분
       if (!userChoice) {
         setStory(newStory);
+        // 첫 실행 시에는 스토리 생성 후 storyProgress를 0으로 유지합니다
+        // 이미 storyProgress는 0이므로 별도로 설정할 필요 없음
       } else {
         setStory((prev) => `${prev}\n\n${newStory}`);
+        // 사용자 선택 후에만 storyProgress 증가
+        setStoryProgress(storyProgress + 1);
       }
-
-      setStoryProgress(storyProgress + 1);
 
       // 주인공 사망 또는 최종 단계 처리
       if (deathCheck) {
         setStoryEnded("failure");
         setChoices([]);
-      } else if (isFinalStep) {
+      } else if (isFinalStep && userChoice) {
+        // userChoice가 있을 때만 최종 단계 체크
         setStoryEnded("success");
         setChoices([]);
       } else if (newChoices.length === 0) {
