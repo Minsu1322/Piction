@@ -147,18 +147,22 @@ export default function StoryGenerator() {
 
   // 스토리 리셋 함수
   const resetStory = () => {
-    setStory("");
-    setChoices([]);
-    setStoryEnded(null);
-    setStoryProgress(0);
-    setInitialized(false);
-    generateStory();
+    if (
+      confirm("정말로 새 이야기를 시작하시겠습니까? 기존 이야기는 사라집니다.")
+    ) {
+      setStory("");
+      setChoices([]);
+      setStoryEnded(null);
+      setStoryProgress(0);
+      setInitialized(false);
+      generateStory();
+    }
   };
 
   return (
-    <div className="w-full flex flex-col h-full">
-      {/* 스토리 컨텐츠 영역 - 스크롤 가능 */}
-      <div className="flex-grow overflow-y-auto scrollbar-hide">
+    <div className="w-full flex h-full">
+      {/* 스토리 영역 (좌측) */}
+      <div className="w-2/3 h-full overflow-y-auto scrollbar-hide pr-6">
         <h1 className="text-3xl font-bold mb-4">📖 생성된 스토리</h1>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="story-content mb-6">
@@ -167,7 +171,7 @@ export default function StoryGenerator() {
         {loading && <p className="text-xl">스토리 생성 중...</p>}
 
         {storyEnded === "failure" && (
-          <div className="story-failed mb-6">
+          <div className="story-failed mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
             <h2 className="text-2xl font-bold text-red-600">
               💀 주인공이 죽었습니다!
             </h2>
@@ -182,7 +186,7 @@ export default function StoryGenerator() {
         )}
 
         {storyEnded === "success" && (
-          <div className="story-completed mb-6">
+          <div className="story-completed mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
             <h2 className="text-2xl font-bold text-green-600">
               🎉 이야기가 완결되었습니다!
             </h2>
@@ -196,10 +200,22 @@ export default function StoryGenerator() {
         )}
       </div>
 
-      {/* 선택지 영역 - 항상 하단에 고정 */}
-      <div className="mt-auto pt-4 pb-8">
-        {choices.length > 0 && (
-          <ChoiceButtons choices={choices} onSelect={generateStory} />
+      {/* 선택지 영역 (우측) */}
+      <div className="w-1/3 h-full pl-6 border-l border-gray-200 flex flex-col">
+        <h2 className="text-2xl font-bold mb-4">✨ 선택지</h2>
+
+        {choices.length > 0 ? (
+          <div className="flex-grow">
+            <ChoiceButtons choices={choices} onSelect={generateStory} />
+          </div>
+        ) : (
+          <div className="flex-grow flex items-center justify-center">
+            <p className="text-gray-500 italic">
+              {storyEnded
+                ? "이야기가 종료되었습니다."
+                : "선택지를 기다리는 중..."}
+            </p>
+          </div>
         )}
       </div>
     </div>

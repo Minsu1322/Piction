@@ -39,9 +39,9 @@ export default function StoryPresets({ onSelect }: Props) {
           <button
             key={preset.title}
             onClick={() => onSelect(preset.title)}
-            className="p-3 bg-amber-100 text-amber-900 rounded-lg hover:bg-amber-200 transition duration-200 text-sm md:text-base border border-amber-300 shadow-sm flex flex-col items-center justify-center h-24"
+            className="p-3 bg-white text-gray-800 rounded-lg hover:bg-gray-50 transition duration-200 text-sm md:text-base border border-gray-200 shadow-sm flex flex-col items-center justify-center h-24 hover:border-blue-300 hover:shadow-md"
           >
-            <span className="text-2xl mb-2">{preset.icon}</span>
+            <span className="text-2xl mb-2 text-blue-600">{preset.icon}</span>
             <span className="text-xl">{preset.title}</span>
           </button>
         ))}

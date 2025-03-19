@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.49.1",
     "framer-motion": "^12.5.0",
     "lucide-react": "^0.482.0",
@@ -16,6 +17,7 @@
     "openai": "^4.87.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "swiper": "^11.2.5",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

@@ -5,10 +5,12 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
 
 export default function Header() {
   const { user, clearUser } = useAuthStore();
   const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -17,11 +19,11 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full bg-[#4a3d3d] shadow-lg py-4 px-6 flex justify-between items-center">
+    <header className="w-full py-4 px-6 flex justify-between items-center">
       {/* 로고 */}
       <Link href="/">
         <Image
-          src="/Piction_Logo.png"
+          src="/Logo.png"
           alt="Piction Logo"
           width={120}
           height={40}
@@ -30,22 +32,35 @@ export default function Header() {
       </Link>
 
       {/* 유저 정보 or 로그인 버튼 */}
+      <button
+        onClick={() => router.push("/story/new")}
+        className="px-4 ml-auto cursor-pointer py-2 mr-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-sm transition"
+      >
+        Start Story
+      </button>
+
       {user ? (
-        <div className="flex items-center gap-4">
-          <span className="text-white">{user.user_metadata.full_name}</span>
-          <Image
-            src={user.user_metadata.avatar_url}
-            alt="User Avatar"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-          <button
-            onClick={handleLogout}
-            className="px-2 py-1 bg-red-400 text-white rounded-xl"
-          >
-            LogOut
+        <div className="relative">
+          <button onClick={() => setIsDropdownOpen((prev) => !prev)}>
+            <Image
+              src={user.user_metadata.avatar_url}
+              alt="User Avatar"
+              width={40}
+              height={40}
+              className="rounded-full cursor-pointer"
+            />
           </button>
+
+          {isDropdownOpen && (
+            <div className="absolute top-full mt-2 right-0 w-24 bg-white border border-gray-300 rounded-md shadow-lg">
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-2 text-black text-center hover:bg-gray-100 rounded-md"
+              >
+                LogOut
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <Link
