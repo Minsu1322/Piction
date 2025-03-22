@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/storyStore";
 import StoryPresets from "@/components/StoryPresets";
@@ -14,8 +14,83 @@ export default function NewStoryPage() {
   const [length, setLength] = useState(50);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePresetSelect = (preset: string) => {
-    setWorld(preset);
+  //가이드패널
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideStep, setGuideStep] = useState(1);
+  const [guideInputs, setGuideInputs] = useState({
+    MainCharacterName: "",
+    MainCharacterName_personality: "",
+    MainCharacterName_Age: "",
+    CharacterName_etc: "",
+    CharacterName_etc_personality: "",
+    Genre: "",
+    Event: "",
+  });
+
+  const guidePanelRef = useRef<HTMLDivElement>(null);
+
+  // 가이드 패널 외부 클릭 시 닫기
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (
+        guidePanelRef.current &&
+        !guidePanelRef.current.contains(event.target)
+      ) {
+        setShowGuide(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [guidePanelRef]);
+
+  const handleGuideInputChange = (field: any, value: any) => {
+    setGuideInputs((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // 가이드 단계 이동
+  const handleNextStep = () => {
+    if (guideStep < 7) {
+      setGuideStep((prev) => prev + 1);
+    } else {
+      applyGuideToWorld();
+    }
+  };
+
+  const handlePrevStep = () => {
+    if (guideStep > 1) {
+      setGuideStep((prev) => prev - 1);
+    }
+  };
+
+  // 가이드 내용을 세계관 설정에 적용
+  const applyGuideToWorld = () => {
+    const generatedWorld = `
+주인공의 이름은 ${guideInputs.MainCharacterName}이며, 주인공의 성격은 ${
+      guideInputs.MainCharacterName_personality
+    } 
+나이는 ${guideInputs.MainCharacterName_Age}세입니다.
+${
+  guideInputs.CharacterName_etc
+    ? `주요 등장인물로는 ${guideInputs.CharacterName_etc}이(가) 있습니다.
+    성격은 ${guideInputs.CharacterName_etc_personality}`
+    : ""
+}
+${guideInputs.Genre ? `이 이야기의 장르는 ${guideInputs.Genre}입니다.` : ""}
+${
+  guideInputs.Event
+    ? `주요 사건으로는 ${guideInputs.Event}이(가) 발생합니다.`
+    : ""
+}
+    `.trim();
+
+    setWorld(generatedWorld);
+    setShowGuide(false);
   };
 
   const handleStartStory = () => {
@@ -83,37 +158,11 @@ export default function NewStoryPage() {
           <div className="h-1 w-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
 
           <div className="grid md:grid-cols-2 gap-8 p-8">
-            {/* Left Column - Story Presets */}
-            <div className="order-2 md:order-1">
-              <div className="bg-gray-50 rounded-xl p-6 h-full border border-gray-100 shadow-sm">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 mr-3 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                    />
-                  </svg>
-                  이야기 세계 선택
-                </h2>
-                <div className="space-y-2">
-                  <StoryPresets onSelect={handlePresetSelect} />
-                </div>
-              </div>
-            </div>
-
             {/* Right Column - Custom Settings */}
             <div className="order-1 md:order-2">
               <div className="space-y-8">
                 {/* World Setting */}
-                <div>
+                <div className="relative">
                   <label className="block text-2xl font-semibold mb-3 text-gray-800 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -131,6 +180,29 @@ export default function NewStoryPage() {
                     </svg>
                     세계관 설정
                   </label>
+
+                  {/* 작성이 어려우신가요? 버튼 */}
+                  <button
+                    onClick={() => setShowGuide(true)}
+                    className="absolute right-0 top-0 text-lg cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    작성이 어려우신가요?
+                  </button>
+
                   <textarea
                     value={world}
                     onChange={(e) => setWorld(e.target.value)}
@@ -260,23 +332,246 @@ export default function NewStoryPage() {
         </div>
       </div>
 
-      {/* Floating Elements */}
-      <div className="absolute bottom-8 right-8 w-16 h-16 bg-white rounded-full border border-gray-200 shadow-lg flex items-center justify-center z-10">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-blue-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
-        </svg>
-      </div>
+      {/* 가이드 패널 */}
+      {showGuide && (
+        <div className="fixed inset-0 bg-white/70 backdrop-blur-md bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg shadow-lg flex items-center justify-center z-50 p-4">
+          <div
+            ref={guidePanelRef}
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 ease-in-out"
+            style={{
+              animation: "slideIn 0.3s ease-out forwards",
+            }}
+          >
+            {/* 가이드 헤더 */}
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold text-gray-800">
+                  세계관 설정 가이드
+                </h3>
+                <button
+                  onClick={() => setShowGuide(false)}
+                  className="text-gray-400 hover:text-gray-600 transition"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* 단계 표시 */}
+              <div className="mt-3 bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 ease-in-out"
+                  style={{ width: `${(guideStep / 5) * 100}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between mt-1 text-xs text-gray-500">
+                <span>1단계</span>
+                <span>7단계</span>
+              </div>
+            </div>
+
+            {/* 가이드 콘텐츠 */}
+            <div className="px-6 py-4">
+              <div className="mb-4">
+                {guideStep === 1 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-xl text-gray-800">
+                      주인공의 이름은 무엇인가요?
+                    </h4>
+                    <p className="text-gray-600 text-lg">
+                      주인공의 이름을 입력해주세요. 이름을 통해 주인공의 특성이
+                      드러날 수 있습니다.
+                    </p>
+                    <input
+                      type="text"
+                      value={guideInputs.MainCharacterName}
+                      onChange={(e) =>
+                        handleGuideInputChange(
+                          "MainCharacterName",
+                          e.target.value
+                        )
+                      }
+                      placeholder="예: 아리아, 레온, 미르..."
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 text-lg focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    />
+                  </div>
+                )}
+
+                {guideStep === 2 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-lg text-gray-800">
+                      주인공은 어떤 성격인가요?
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      성격에 따라 주인공의 경험과 선택이 달라질 수 있습니다.
+                    </p>
+                    <input
+                      type="text"
+                      value={guideInputs.MainCharacterName_personality}
+                      onChange={(e) =>
+                        handleGuideInputChange(
+                          "MainCharacterName_personality",
+                          e.target.value
+                        )
+                      }
+                      placeholder="예: 소심하고 음침한 성격, 거침없고 활동적인 성격, 정의로움, 우유부단함"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    />
+                  </div>
+                )}
+
+                {guideStep === 3 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-lg text-gray-800">
+                      주인공의 나이는 몇 살인가요?
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      나이에 따라 주인공의 경험과 시각이 달라질 수 있습니다.
+                    </p>
+                    <input
+                      type="number"
+                      value={guideInputs.MainCharacterName_Age}
+                      onChange={(e) =>
+                        handleGuideInputChange(
+                          "MainCharacterName_Age",
+                          e.target.value
+                        )
+                      }
+                      placeholder="예: 17"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    />
+                  </div>
+                )}
+
+                {guideStep === 4 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-xl text-gray-800">
+                      함께하는 등장인물은 누구인가요?
+                    </h4>
+                    <p className="text-gray-600 text-xl">
+                      주인공 외에 이야기에 등장하는 중요한 인물들을
+                      입력해주세요.
+                    </p>
+                    <input
+                      type="text"
+                      value={guideInputs.CharacterName_etc}
+                      onChange={(e) =>
+                        handleGuideInputChange(
+                          "CharacterName_etc",
+                          e.target.value
+                        )
+                      }
+                      placeholder="예: 백수 홍길동, 현자 엘리아스, 기사 로엔,..."
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    />
+                  </div>
+                )}
+
+                {guideStep === 5 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-xl text-gray-800">
+                      함께하는 등장인물들의 성격은 어떤가요?
+                    </h4>
+                    <p className="text-gray-600 text-xl">
+                      주인공 외에 이야기에 등장하는 중요한 인물들의 성격을
+                      입력해주세요.
+                    </p>
+                    <input
+                      type="text"
+                      value={guideInputs.CharacterName_etc_personality}
+                      onChange={(e) =>
+                        handleGuideInputChange(
+                          "CharacterName_etc_personality",
+                          e.target.value
+                        )
+                      }
+                      placeholder="예: 밝고 명량하며 참견하는걸 좋아함, 고집세고 차가움."
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    />
+                  </div>
+                )}
+
+                {guideStep === 6 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-xl text-gray-800">
+                      이야기의 장르는 무엇인가요?
+                    </h4>
+                    <p className="text-gray-600 text-lg">
+                      판타지, SF, 로맨스, 추리 등 이야기의 장르를 선택해주세요.
+                    </p>
+                    <select
+                      value={guideInputs.Genre}
+                      onChange={(e) =>
+                        handleGuideInputChange("Genre", e.target.value)
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                    >
+                      <option value="">장르 선택하기</option>
+                      <option value="판타지">판타지</option>
+                      <option value="SF">SF</option>
+                      <option value="로맨스">로맨스</option>
+                      <option value="추리">추리</option>
+                      <option value="역사">역사</option>
+                      <option value="모험">모험</option>
+                      <option value="공포">공포</option>
+                      <option value="일상">일상</option>
+                    </select>
+                  </div>
+                )}
+
+                {guideStep === 7 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-lg text-gray-800">
+                      어떤 사건이 발생하나요?
+                    </h4>
+                    <p className="text-gray-600 text-lg">
+                      이야기의 핵심이 되는 사건을 설명해주세요.
+                    </p>
+                    <textarea
+                      value={guideInputs.Event}
+                      onChange={(e) =>
+                        handleGuideInputChange("Event", e.target.value)
+                      }
+                      placeholder="예: 고대 봉인된 악이 깨어나 세계를 위협하기 시작합니다. (자세할수록 좋아요!)"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none h-24"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 가이드 푸터 (네비게이션 버튼) */}
+            <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl flex justify-between">
+              <button
+                onClick={handlePrevStep}
+                disabled={guideStep === 1}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                이전
+              </button>
+
+              <button
+                onClick={handleNextStep}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium"
+              >
+                {guideStep === 7 ? "완료" : "다음"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
