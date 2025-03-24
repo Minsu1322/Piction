@@ -15,3 +15,34 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes run-right {
+  0% {
+    transform: translateX(-50px);
+  }
+  90% {
+    transform: translateX(calc(100vw - 50px));
+  }
+  100% {
+    transform: translateX(calc(100vw - 50px));
+  }
+}
+.animate-run-right {
+  animation: run-right 15s linear infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+.animate-pulse-delay-1 {
+  animation: pulse 1.5s infinite;
+}
+
+.animate-pulse-delay-2 {
+  animation: pulse 1.5s infinite 0.3s;
+}
+
+.animate-pulse-delay-3 {
+  animation: pulse 1.5s infinite 0.6s;
+}

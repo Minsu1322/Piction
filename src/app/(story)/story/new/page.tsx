@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/storyStore";
-import StoryPresets from "@/components/StoryPresets";
 import { Nanum_Pen_Script } from "next/font/google";
 const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
 
@@ -29,7 +28,6 @@ export default function NewStoryPage() {
 
   const guidePanelRef = useRef<HTMLDivElement>(null);
 
-  // 가이드 패널 외부 클릭 시 닫기
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (
@@ -157,7 +155,7 @@ ${
           {/* Progress Bar */}
           <div className="h-1 w-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
 
-          <div className="grid md:grid-cols-2 gap-8 p-8">
+          <div className="grid 2 gap-8 p-8">
             {/* Right Column - Custom Settings */}
             <div className="order-1 md:order-2">
               <div className="space-y-8">
@@ -184,7 +182,7 @@ ${
                   {/* 작성이 어려우신가요? 버튼 */}
                   <button
                     onClick={() => setShowGuide(true)}
-                    className="absolute right-0 top-0 text-lg cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
+                    className="absolute right-0 top-0 text-xl cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -322,11 +320,11 @@ ${
         <div className="mt-12 text-center">
           <div className="inline-block bg-white px-8 py-4 rounded-full border border-gray-200 shadow-md">
             <p className="text-gray-800 text-lg italic">
-              "모든 위대한 이야기는{" "}
+              모든 위대한 이야기는
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-semibold">
                 당신의 선택
               </span>
-              으로 완성됩니다"
+              으로 완성됩니다
             </p>
           </div>
         </div>
@@ -334,23 +332,38 @@ ${
 
       {/* 가이드 패널 */}
       {showGuide && (
-        <div className="fixed inset-0 bg-white/70 backdrop-blur-md bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg shadow-lg flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div
             ref={guidePanelRef}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 ease-in-out"
+            className="bg-white rounded-2xl shadow-[0_10px_50px_rgba(59,130,246,0.3),0_0_30px_rgba(139,92,246,0.2)] max-w-3xl w-full transform transition-all duration-300 ease-in-out overflow-hidden"
             style={{
-              animation: "slideIn 0.3s ease-out forwards",
+              animation:
+                "floatIn 0.4s cubic-bezier(0.21, 1.11, 0.7, 1.2) forwards",
             }}
           >
             {/* 가이드 헤더 */}
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-6 py-5 bg-gradient-to-r from-blue-500 to-purple-500 text-white">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3 className="text-xl font-bold flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
                   세계관 설정 가이드
                 </h3>
                 <button
                   onClick={() => setShowGuide(false)}
-                  className="text-gray-400 hover:text-gray-600 transition"
+                  className="text-white hover:text-gray-200 transition p-1 rounded-full hover:bg-white/20"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -370,183 +383,331 @@ ${
               </div>
 
               {/* 단계 표시 */}
-              <div className="mt-3 bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div className="mt-4 relative h-2 bg-white/30 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 ease-in-out"
-                  style={{ width: `${(guideStep / 5) * 100}%` }}
+                  className="absolute top-0 left-0 h-full bg-white transition-all duration-300 ease-in-out"
+                  style={{ width: `${(guideStep / 7) * 100}%` }}
                 ></div>
               </div>
-              <div className="flex justify-between mt-1 text-xs text-gray-500">
-                <span>1단계</span>
-                <span>7단계</span>
+              <div className="flex justify-between mt-1 text-s text-white/80">
+                <span>Step {guideStep}/7</span>
+                <span>{Math.round((guideStep / 7) * 100)}% 완료!</span>
               </div>
             </div>
 
             {/* 가이드 콘텐츠 */}
-            <div className="px-6 py-4">
+            <div className="px-6 py-6">
               <div className="mb-4">
                 {guideStep === 1 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-xl text-gray-800">
-                      주인공의 이름은 무엇인가요?
-                    </h4>
-                    <p className="text-gray-600 text-lg">
-                      주인공의 이름을 입력해주세요. 이름을 통해 주인공의 특성이
-                      드러날 수 있습니다.
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        1
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        주인공의 이름은 무엇인가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
+                      주인공의 이름을 입력해주세요.
                     </p>
-                    <input
-                      type="text"
-                      value={guideInputs.MainCharacterName}
-                      onChange={(e) =>
-                        handleGuideInputChange(
-                          "MainCharacterName",
-                          e.target.value
-                        )
-                      }
-                      placeholder="예: 아리아, 레온, 미르..."
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 text-lg focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="text"
+                        value={guideInputs.MainCharacterName}
+                        onChange={(e) =>
+                          handleGuideInputChange(
+                            "MainCharacterName",
+                            e.target.value
+                          )
+                        }
+                        placeholder="예: 아리아, 레온, 미르..."
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 2 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-lg text-gray-800">
-                      주인공은 어떤 성격인가요?
-                    </h4>
-                    <p className="text-gray-600 text-sm">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        2
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        주인공은 어떤 성격인가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       성격에 따라 주인공의 경험과 선택이 달라질 수 있습니다.
                     </p>
-                    <input
-                      type="text"
-                      value={guideInputs.MainCharacterName_personality}
-                      onChange={(e) =>
-                        handleGuideInputChange(
-                          "MainCharacterName_personality",
-                          e.target.value
-                        )
-                      }
-                      placeholder="예: 소심하고 음침한 성격, 거침없고 활동적인 성격, 정의로움, 우유부단함"
-                      className="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="text"
+                        value={guideInputs.MainCharacterName_personality}
+                        onChange={(e) =>
+                          handleGuideInputChange(
+                            "MainCharacterName_personality",
+                            e.target.value
+                          )
+                        }
+                        placeholder="예: 소심하고 음침한 성격, 거침없고 활동적인 성격, 정의로움, 우유부단함"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 3 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-lg text-gray-800">
-                      주인공의 나이는 몇 살인가요?
-                    </h4>
-                    <p className="text-gray-600 text-sm">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        3
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        주인공의 나이는 몇 살인가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       나이에 따라 주인공의 경험과 시각이 달라질 수 있습니다.
                     </p>
-                    <input
-                      type="number"
-                      value={guideInputs.MainCharacterName_Age}
-                      onChange={(e) =>
-                        handleGuideInputChange(
-                          "MainCharacterName_Age",
-                          e.target.value
-                        )
-                      }
-                      placeholder="예: 17"
-                      className="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="number"
+                        value={guideInputs.MainCharacterName_Age}
+                        onChange={(e) =>
+                          handleGuideInputChange(
+                            "MainCharacterName_Age",
+                            e.target.value
+                          )
+                        }
+                        placeholder="예: 17"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 4 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-xl text-gray-800">
-                      함께하는 등장인물은 누구인가요?
-                    </h4>
-                    <p className="text-gray-600 text-xl">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        4
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        함께하는 등장인물은 누구인가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       주인공 외에 이야기에 등장하는 중요한 인물들을
                       입력해주세요.
                     </p>
-                    <input
-                      type="text"
-                      value={guideInputs.CharacterName_etc}
-                      onChange={(e) =>
-                        handleGuideInputChange(
-                          "CharacterName_etc",
-                          e.target.value
-                        )
-                      }
-                      placeholder="예: 백수 홍길동, 현자 엘리아스, 기사 로엔,..."
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="text"
+                        value={guideInputs.CharacterName_etc}
+                        onChange={(e) =>
+                          handleGuideInputChange(
+                            "CharacterName_etc",
+                            e.target.value
+                          )
+                        }
+                        placeholder="예: 백수 홍길동, 현자 엘리아스, 기사 로엔,..."
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 5 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-xl text-gray-800">
-                      함께하는 등장인물들의 성격은 어떤가요?
-                    </h4>
-                    <p className="text-gray-600 text-xl">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        5
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        함께하는 등장인물들의 성격은 어떤가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       주인공 외에 이야기에 등장하는 중요한 인물들의 성격을
                       입력해주세요.
                     </p>
-                    <input
-                      type="text"
-                      value={guideInputs.CharacterName_etc_personality}
-                      onChange={(e) =>
-                        handleGuideInputChange(
-                          "CharacterName_etc_personality",
-                          e.target.value
-                        )
-                      }
-                      placeholder="예: 밝고 명량하며 참견하는걸 좋아함, 고집세고 차가움."
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="text"
+                        value={guideInputs.CharacterName_etc_personality}
+                        onChange={(e) =>
+                          handleGuideInputChange(
+                            "CharacterName_etc_personality",
+                            e.target.value
+                          )
+                        }
+                        placeholder="예: 밝고 명량하며 참견하는걸 좋아함, 고집세고 차가움."
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 6 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-xl text-gray-800">
-                      이야기의 장르는 무엇인가요?
-                    </h4>
-                    <p className="text-gray-600 text-lg">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        6
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        이야기의 장르는 무엇인가요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       판타지, SF, 로맨스, 추리 등 이야기의 장르를 선택해주세요.
                     </p>
-                    <select
-                      value={guideInputs.Genre}
-                      onChange={(e) =>
-                        handleGuideInputChange("Genre", e.target.value)
-                      }
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                    >
-                      <option value="">장르 선택하기</option>
-                      <option value="판타지">판타지</option>
-                      <option value="SF">SF</option>
-                      <option value="로맨스">로맨스</option>
-                      <option value="추리">추리</option>
-                      <option value="역사">역사</option>
-                      <option value="모험">모험</option>
-                      <option value="공포">공포</option>
-                      <option value="일상">일상</option>
-                    </select>
+                    <div className="ml-11 relative">
+                      <select
+                        value={guideInputs.Genre}
+                        onChange={(e) =>
+                          handleGuideInputChange("Genre", e.target.value)
+                        }
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      >
+                        <option value="">장르 선택하기</option>
+                        <option value="판타지">판타지</option>
+                        <option value="SF">SF</option>
+                        <option value="로맨스">로맨스</option>
+                        <option value="추리">추리</option>
+                        <option value="역사">역사</option>
+                        <option value="모험">모험</option>
+                        <option value="공포">공포</option>
+                        <option value="일상">일상</option>
+                      </select>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
 
                 {guideStep === 7 && (
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-lg text-gray-800">
-                      어떤 사건이 발생하나요?
-                    </h4>
-                    <p className="text-gray-600 text-lg">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-blue-600">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 mr-3 text-lg font-bold">
+                        7
+                      </span>
+                      <h4 className="font-semibold text-xl">
+                        어떤 사건이 발생하나요?
+                      </h4>
+                    </div>
+                    <p className="text-gray-600 ml-11">
                       이야기의 핵심이 되는 사건을 설명해주세요.
                     </p>
-                    <textarea
-                      value={guideInputs.Event}
-                      onChange={(e) =>
-                        handleGuideInputChange("Event", e.target.value)
-                      }
-                      placeholder="예: 고대 봉인된 악이 깨어나 세계를 위협하기 시작합니다. (자세할수록 좋아요!)"
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none h-24"
-                    />
+                    <div className="ml-11 relative">
+                      <input
+                        type="text"
+                        value={guideInputs.Event}
+                        onChange={(e) =>
+                          handleGuideInputChange("Event", e.target.value)
+                        }
+                        placeholder="예: 고대 봉인된 악이 깨어나 세계를 위협하기 시작합니다. (자세할수록 좋아요!)"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 )}
               </div>
@@ -564,7 +725,7 @@ ${
 
               <button
                 onClick={handleNextStep}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium"
+                className="px-4 py-2 bg-gradient-to-r from-blue-400 to-purple-400 text-white rounded-lg font-medium cursor-pointer"
               >
                 {guideStep === 7 ? "완료" : "다음"}
               </button>

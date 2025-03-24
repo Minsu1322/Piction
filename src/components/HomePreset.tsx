@@ -41,6 +41,13 @@ export default function HomePreset() {
           >
             당신의 선택, AI가 당신만의 소설로 만들어 드립니다.
           </motion.p>
+
+          <button
+            onClick={() => router.push("/story/new")}
+            className="flex-1 mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 cursor-pointer px-28 rounded-lg font-medium hover:bg-gray-200 transition-all"
+          >
+            나만의 이야기 만들기
+          </button>
         </div>
 
         {/* Featured Story Card */}
@@ -129,17 +136,11 @@ export default function HomePreset() {
                       <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.98 }}
-                        className="flex-1 cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                        className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
                         onClick={() => handlePresetClick(world, length)}
                       >
-                        <PlayIcon className="w-5  h-5" /> 바로 시작하기
+                        <PlayIcon className="w-5  h-5" /> 프리셋으로 시작하기
                       </motion.button>
-                      <button
-                        onClick={() => router.push("/story/new")}
-                        className="flex-1 bg-gray-100 text-gray-700 py-3 cursor-pointer px-6 rounded-lg font-medium hover:bg-gray-200 transition-all"
-                      >
-                        나만의 이야기 만들기
-                      </button>
                     </div>
                   </motion.div>
                 </motion.div>

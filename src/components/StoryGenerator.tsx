@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
 import OpenAI from "openai";
 import ChoiceButtons from "@/components/ChoiceButtons";
+import StoryLoading from "./LoadingComponents/StoryLoading";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -17,7 +18,7 @@ export default function StoryGenerator() {
   const [choices, setChoices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [initialized, setInitialized] = useState(false);
+  // const [initialized, setInitialized] = useState(false);
   const [storyEnded, setStoryEnded] = useState<"success" | "failure" | null>(
     null
   );
@@ -51,7 +52,7 @@ export default function StoryGenerator() {
         max_tokens: Math.min(storyLength * 50, 2048),
       });
 
-      let generatedText = response.choices[0]?.message?.content?.trim();
+      const generatedText = response.choices[0]?.message?.content?.trim();
       if (!generatedText) {
         setErrorMessage("⚠️ 스토리를 생성하지 못했습니다. 다시 시도해주세요.");
         setLoading(false);
@@ -79,7 +80,7 @@ export default function StoryGenerator() {
       // 초기 스토리 설정
       setStory(newStory);
       setChoices(newChoices.length > 0 ? newChoices : []);
-      setInitialized(true);
+      // setInitialized(true);
 
       // 초기 스토리는 storyProgress를 증가시키지 않음
     } catch (error) {
@@ -105,7 +106,7 @@ export default function StoryGenerator() {
   1. 이야기를 ${isFinalStep ? "완결되도록 마무리하고" : "이어가고"} ${
           isFinalStep
             ? "더 이상의 선택지는 제공하지 마라."
-            : "반드시 2~3개의 새로운 선택지를 제공해라."
+            : "반드시 2~4개의 새로운 선택지를 제공해라."
         }
   2. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
   3. 대화체를 적극적으로 활용하라. 주인공과 등장인물 간의 대화는 큰따옴표(")로 감싸고, 상황 설명과 지문은 자연스럽게 섞어라.
@@ -116,26 +117,29 @@ export default function StoryGenerator() {
   "이곳을 떠나야 해. 당장." — 더 이상 머뭇거릴 시간이 없다.  
   "아니, 기다려봐. 무언가 이상해." — 뭔가 놓친 게 있을지도 모른다.  
   "누군가 있다...!" — 낯선 기척이 느껴진다. 숨을 죽일 것인가?
+  "좀 더 시간이 필요해." — 아직은 감정을 확신할 수 없다.  
+  "친구로 남는 게 좋겠어." — 현재의 관계가 변하는 것이 두렵다.
   
-  6. 예측 불가능한 전개와 위험한 상황을 과감하게 포함시켜라.
+6. 장르의 분위기와 일관성을 유지하라. 로맨스 장르라면 감정적 갈등, 설렘, 오해와 화해 등 로맨스 요소에 집중하라.
   7. ${
     randomEventChance < 25
-      ? "갑작스러운 위기나 예상치 못한 사건을 발생시켜라."
-      : "이야기의 자연스러운 흐름을 유지하되, 단조롭지 않게 전개하라."
+      ? "예상치 못한 로맨스적 상황이나 감정적 도전을 발생시켜라(예: 오해, 라이벌의 등장, 과거의 비밀)."
+      : "이야기의 자연스러운 감정선을 유지하되, 단조롭지 않게 전개하라."
   }
   8. ${
-    randomEventChance < 10 && !isFinalStep
+    randomEventChance < 5 && !isFinalStep
       ? "주인공이 죽거나 치명적 위기에 처할 가능성을 고려하라. 만약 주인공이 죽게 된다면, 마지막에 '[주인공 사망]'이라고 명시하라."
       : "주인공의 생존을 보장하지 말고, 선택에 따른 결과를 사실적으로 반영하라."
   }`
       : `세계관: ${worldSetting}\n단어 수: ${storyLength}
   
   지시사항:
-  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
+  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~4개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
   2. 스토리를 현대 웹소설 스타일로 작성하라. 등장인물 간 대화는 큰따옴표(")를 사용하여 표현하라.
   3. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
   4. 선택지 중 하나는 위험하거나 도전적인 선택이 되도록 하라.
-  5. 스토리는 흥미진진하고 예측 불가능한 요소를 포함해야 한다.`;
+  5. 스토리는 흥미진진하고 예측 불가능한 요소를 포함해야 한다.
+  6. 납치, 폭력, 살인 등 로맨스 장르와 맞지 않는 극단적 위험 상황은 포함하지 마라.`;
 
     try {
       const response = await openai.chat.completions.create({
@@ -145,7 +149,7 @@ export default function StoryGenerator() {
         max_tokens: Math.min(storyLength * 50, 2048),
       });
 
-      let generatedText = response.choices[0]?.message?.content?.trim();
+      const generatedText = response.choices[0]?.message?.content?.trim();
       if (!generatedText) {
         setErrorMessage("⚠️ 스토리를 생성하지 못했습니다. 다시 시도해주세요.");
         setLoading(false);
@@ -156,7 +160,7 @@ export default function StoryGenerator() {
       const deathCheck = generatedText.includes("[주인공 사망]");
 
       // 사망 표시 제거
-      let cleanText = generatedText.replace("[주인공 사망]", "");
+      const cleanText = generatedText.replace("[주인공 사망]", "");
 
       // 스토리와 선택지 분리 개선
       const choicePattern = /(\n\d+\.|\n\-|\n\d+\))\s+.+/g;
@@ -219,7 +223,7 @@ export default function StoryGenerator() {
       setChoices([]);
       setStoryEnded(null);
       setStoryProgress(0);
-      setInitialized(false);
+      // setInitialized(false);
       generateStory();
     }
   };
@@ -233,7 +237,16 @@ export default function StoryGenerator() {
         <div className="story-content mb-6">
           <p className="whitespace-pre-wrap text-2xl">{story}</p>
         </div>
-        {loading && <p className="text-xl">스토리 생성 중...</p>}
+        {/* {loading && <p className="text-xl">스토리 생성 중...</p>} */}
+        {loading && (
+          <>
+            {!story ? (
+              <StoryLoading />
+            ) : (
+              <p className="text-xl">스토리 생성 중...</p>
+            )}
+          </>
+        )}
 
         {storyEnded === "failure" && (
           <div className="story-failed mb-6 p-4 bg-red-50 rounded-lg border border-red-200">

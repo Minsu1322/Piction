@@ -34,7 +34,7 @@ export default function Header() {
       {/* 유저 정보 or 로그인 버튼 */}
       <button
         onClick={() => router.push("/story/new")}
-        className="px-4 ml-auto cursor-pointer py-2 mr-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-sm transition"
+        className="px-4 ml-auto cursor-pointer py-2 mr-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-sm transition"
       >
         Start Story
       </button>
@@ -63,12 +63,7 @@ export default function Header() {
           )}
         </div>
       ) : (
-        <Link
-          href="/login"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          로그인
-        </Link>
+        <p></p>
       )}
     </header>
   );

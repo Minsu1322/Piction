@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { supabase } from "@/lib/supabaseClient";
 import { usePathname, useRouter } from "next/navigation";
+import Spinner from "./LoadingComponents/LoginLoading";
 
 export default function AuthProvider({
   children,
@@ -41,7 +42,7 @@ export default function AuthProvider({
     return () => subscription.unsubscribe();
   }, [setUser]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
 
   // 로그인 페이지에서는 리디렉션 안 하도록 예외 처리
   if (!user && pathname !== "/login") {

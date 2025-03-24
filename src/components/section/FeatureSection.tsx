@@ -62,11 +62,6 @@ export default function FeatureSection() {
                 {feature.title}
               </h3>
               <p className="text-gray-600">{feature.description}</p>
-
-              {/* 예시 이미지 영역 */}
-              <div className="mt-6 rounded-lg h-40 w-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400 text-sm">
-                예시 이미지 영역
-              </div>
             </motion.div>
           ))}
         </div>
