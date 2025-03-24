@@ -22,7 +22,7 @@ export default function Login() {
           Welcome to Piction
         </h1>
         <p className="text-gray-600 text-xl">
-          당신의 선택으로 펼쳐지는 이야기의를 만들어보세요.
+          당신의 선택으로 펼쳐지는 이야기를 만들어보세요.
         </p>
       </div>
 

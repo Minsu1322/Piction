@@ -2,10 +2,11 @@
 
 import { useStoryStore } from "@/store/storyStore";
 import StoryGenerator from "@/components/StoryGenerator";
-import { Nanum_Pen_Script } from "next/font/google";
+import { Nanum_Pen_Script, Noto_Sans_KR } from "next/font/google";
 import { useState } from "react";
 
 const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
+const NotoFont = Noto_Sans_KR({ weight: "400", subsets: ["latin"] });
 
 export default function PlayStoryPage() {
   const { worldSetting, storyLength } = useStoryStore();
@@ -21,7 +22,7 @@ export default function PlayStoryPage() {
 
   return (
     <div
-      className={`h-screen flex flex-col items-center justify-center p-4 pt-0 ${nanumFont.className}`}
+      className={`h-screen flex flex-col items-center justify-center p-4 pt-0 ${NotoFont.className}`}
     >
       {/* 전체 컨테이너 - 그림자 효과로 은은한 빛나는 테두리 구현 */}
       <div className="w-full max-w-[95%] h-[90vh] flex flex-col rounded-xl overflow-hidden relative">

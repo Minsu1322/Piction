@@ -235,7 +235,7 @@ export default function StoryGenerator() {
         <h1 className="text-3xl font-bold mb-4">📖 생성된 스토리</h1>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="story-content mb-6">
-          <p className="whitespace-pre-wrap text-2xl">{story}</p>
+          <p className="whitespace-pre-wrap text-xl">{story}</p>
         </div>
         {/* {loading && <p className="text-xl">스토리 생성 중...</p>} */}
         {loading && (
