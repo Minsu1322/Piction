@@ -2,10 +2,9 @@
 
 import { useStoryStore } from "@/store/storyStore";
 import StoryGenerator from "@/components/StoryGenerator";
-import { Nanum_Pen_Script, Noto_Sans_KR } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import { useState } from "react";
 
-const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
 const NotoFont = Noto_Sans_KR({ weight: "400", subsets: ["latin"] });
 
 export default function PlayStoryPage() {
