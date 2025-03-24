@@ -1,20 +1,9 @@
 "use client";
 
 import { supabase } from "@/lib/supabaseClient";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const router = useRouter();
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  const handleGoogleLogin = async () => {
+  const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -22,61 +11,7 @@ export default function Login() {
       },
     });
 
-    if (error) {
-      console.error("로그인 오류:", error);
-      setError("Google 로그인 중 오류가 발생했습니다");
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setMessage("");
-
-    try {
-      if (isLogin) {
-        // 로그인 처리
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "로그인 중 오류가 발생했습니다");
-        }
-
-        setMessage("로그인 성공!");
-        router.refresh();
-        router.push("/");
-      } else {
-        // 회원가입 처리
-        const response = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password, name }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "회원가입 중 오류가 발생했습니다");
-        }
-
-        setMessage("회원가입 이메일이 발송되었습니다. 이메일을 확인해주세요.");
-      }
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    if (error) console.error("로그인 오류:", error);
   };
 
   return (
@@ -96,132 +31,15 @@ export default function Login() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-              {isLogin ? "로그인" : "회원가입"}
+              로그인
             </h2>
-            <p className="text-gray-500">
-              {isLogin
-                ? "계정에 로그인하거나 Google로 시작하세요"
-                : "새 계정을 만들어 시작하세요"}
-            </p>
-          </div>
-
-          {/* 이메일/비밀번호 폼 */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  이름
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="이름을 입력하세요"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  required={!isLogin}
-                />
-              </div>
-            )}
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                이메일
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="이메일을 입력하세요"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                비밀번호
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호를 입력하세요"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                required
-              />
-            </div>
-
-            {error && (
-              <div className="text-red-500 text-sm py-2 px-3 bg-red-50 rounded-md">
-                {error}
-              </div>
-            )}
-
-            {message && (
-              <div className="text-green-500 text-sm py-2 px-3 bg-green-50 rounded-md">
-                {message}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl text-white font-medium transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg hover:opacity-90 flex justify-center items-center"
-            >
-              {loading ? (
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              ) : isLogin ? (
-                "로그인"
-              ) : (
-                "회원가입"
-              )}
-            </button>
-          </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">또는</span>
-            </div>
+            <p className="text-gray-500">Google 계정으로 간편하게 시작하세요</p>
           </div>
 
           {/* 구글 로그인 버튼 */}
           <button
-            onClick={handleGoogleLogin}
-            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl text-gray-700 font-medium transition-all duration-300 bg-white border border-gray-300 hover:bg-gray-50"
+            onClick={handleLogin}
+            className="flex items-center justify-center gap-3 w-full py-4 rounded-xl text-white font-medium transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg hover:opacity-90"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -246,21 +64,11 @@ export default function Login() {
                 d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
               />
             </svg>
-            <span>Continue with Google</span>
+            <span>Login with Google</span>
           </button>
-
-          {/* 계정 전환 링크 */}
-          <div className="text-center text-sm">
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
-            >
-              {isLogin
-                ? "계정이 없으신가요? 회원가입"
-                : "이미 계정이 있으신가요? 로그인"}
-            </button>
-          </div>
         </div>
+
+        {/* 하단 정보 */}
       </div>
 
       {/* 하단 설명 */}
