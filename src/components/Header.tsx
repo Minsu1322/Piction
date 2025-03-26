@@ -42,13 +42,21 @@ export default function Header() {
       {user ? (
         <div className="relative">
           <button onClick={() => setIsDropdownOpen((prev) => !prev)}>
-            <Image
-              src={user.user_metadata.avatar_url}
-              alt="User Avatar"
-              width={40}
-              height={40}
-              className="rounded-full cursor-pointer"
-            />
+            {user?.user_metadata?.avatar_url ? (
+              <Image
+                src={user.user_metadata.avatar_url}
+                alt="User Avatar"
+                width={40}
+                height={40}
+                className="rounded-full cursor-pointer"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium cursor-pointer">
+                {user.data.user.user_metadata.name
+                  ? user.data.user.user_metadata.name.charAt(0).toUpperCase()
+                  : "U"}
+              </div>
+            )}
           </button>
 
           {isDropdownOpen && (

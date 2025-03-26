@@ -11,11 +11,11 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     const {
@@ -33,22 +33,26 @@ export default function AuthProvider({
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) setUser(user);
+      if (user) {
+        setUser(user);
+      } else if (pathname !== "/login") {
+        setShouldRedirect(true);
+      }
       setLoading(false);
     };
 
     fetchUser();
 
     return () => subscription.unsubscribe();
-  }, [setUser]);
+  }, [setUser, pathname, router]);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push("/login");
+    }
+  }, [shouldRedirect, router]);
 
   if (loading) return <Spinner />;
-
-  // 로그인 페이지에서는 리디렉션 안 하도록 예외 처리
-  if (!user && pathname !== "/login") {
-    router.push("/login");
-    return null;
-  }
 
   return <>{children}</>;
 }

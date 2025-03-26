@@ -1,9 +1,12 @@
 "use client";
 
 import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
 
 export default function Login() {
-  const handleLogin = async () => {
+  const [error, setError] = useState("");
+
+  const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -11,7 +14,10 @@ export default function Login() {
       },
     });
 
-    if (error) console.error("로그인 오류:", error);
+    if (error) {
+      console.error("로그인 오류:", error);
+      setError("Google 로그인 중 오류가 발생했습니다");
+    }
   };
 
   return (
@@ -33,13 +39,21 @@ export default function Login() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">
               로그인
             </h2>
-            <p className="text-gray-500">Google 계정으로 간편하게 시작하세요</p>
+            <p className="text-red-500 text-sm mb-4">
+              현재 Google 로그인만 지원됩니다.
+            </p>
           </div>
+
+          {error && (
+            <div className="text-red-500 text-sm py-2 px-3 bg-red-50 rounded-md">
+              {error}
+            </div>
+          )}
 
           {/* 구글 로그인 버튼 */}
           <button
-            onClick={handleLogin}
-            className="flex items-center justify-center gap-3 w-full py-4 rounded-xl text-white font-medium transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg hover:opacity-90"
+            onClick={handleGoogleLogin}
+            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl text-gray-700 font-medium transition-all duration-300 bg-white border border-gray-300 hover:bg-gray-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -64,14 +78,12 @@ export default function Login() {
                 d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
               />
             </svg>
-            <span>Login with Google</span>
+            <span>Continue with Google</span>
           </button>
         </div>
-
-        {/* 하단 정보 */}
       </div>
 
-      {/* 하단 설명 */}
+      {/* 하단 설명 (이전과 동일) */}
       <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
         <div className="text-center p-6">
           <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white">
