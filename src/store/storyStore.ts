@@ -11,7 +11,9 @@ type StoryState = {
   storyProgress: number;
   story: StoryStep[];
   currentStep: number;
+  GenreSetting: string;
   setWorldSetting: (setting: string) => void;
+  setGenreSetting: (genre: string[]) => void;
   setStoryLength: (length: number) => void;
   setStoryProgress: (progress: number) => void;
   addStoryStep: (step: StoryStep) => void;
@@ -24,7 +26,9 @@ export const useStoryStore = create<StoryState>((set) => ({
   storyProgress: 0,
   story: [],
   currentStep: 0,
+  GenreSetting: "",
   setWorldSetting: (setting) => set({ worldSetting: setting }),
+  setGenreSetting: (genres) => set({ GenreSetting: genres.join(",") }),
   setStoryLength: (length) => set({ storyLength: length }),
   setStoryProgress: (progress) => set({ storyProgress: progress }),
   addStoryStep: (step) =>

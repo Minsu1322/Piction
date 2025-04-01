@@ -79,9 +79,10 @@ export default function HomePreset() {
                     <Image
                       src={image}
                       alt={title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="hover:scale-105 transition-transform duration-700"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover hover:scale-105 transition-transform duration-700"
+                      priority={id === 1}
                     />
                     <div className="absolute bottom-6 left-6 z-20">
                       <div className="flex gap-2 mb-2">

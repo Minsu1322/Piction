@@ -28,7 +28,7 @@ body {
   }
 }
 .animate-run-right {
-  animation: run-right 15s linear infinite;
+  animation: run-right 5s linear infinite;
 }
 
 .animate-bounce-slow {

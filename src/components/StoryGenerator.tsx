@@ -12,8 +12,13 @@ const openai = new OpenAI({
 });
 
 export default function StoryGenerator() {
-  const { worldSetting, storyLength, storyProgress, setStoryProgress } =
-    useStoryStore();
+  const {
+    worldSetting,
+    storyLength,
+    storyProgress,
+    GenreSetting,
+    setStoryProgress,
+  } = useStoryStore();
   const [story, setStory] = useState<string>("");
   const [choices, setChoices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +40,7 @@ export default function StoryGenerator() {
     setLoading(true);
     setErrorMessage("");
 
-    const promptData = `세계관: ${worldSetting}\n분량 수: ${storyLength}
+    const promptData = `세계관: ${worldSetting}\n분량 수: ${storyLength}\n장르: ${GenreSetting}
   
   지시사항:
   1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.

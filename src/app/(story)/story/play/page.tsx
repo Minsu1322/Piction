@@ -8,7 +8,7 @@ import { useState } from "react";
 const NotoFont = Noto_Sans_KR({ weight: "400", subsets: ["latin"] });
 
 export default function PlayStoryPage() {
-  const { worldSetting, storyLength } = useStoryStore();
+  const { worldSetting, storyLength, GenreSetting } = useStoryStore();
   const [showWorldSetting, setShowWorldSetting] = useState(false);
 
   if (!worldSetting) {
@@ -47,6 +47,10 @@ export default function PlayStoryPage() {
                 <div className="mt-4 p-4 rounded-md bg-white flex-grow overflow-y-auto scrollbar-hide">
                   <p className="text-lg font-semibold">🌍 세계관 설정</p>
                   <p className="mt-2 text-gray-700">
+                    장르 : {GenreSetting}
+                    <br />
+                    줄거리
+                    <br />
                     {worldSetting} ({storyLength}단계)
                   </p>
                 </div>

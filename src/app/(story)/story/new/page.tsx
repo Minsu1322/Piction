@@ -8,10 +8,12 @@ const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
 
 export default function NewStoryPage() {
   const router = useRouter();
-  const { setWorldSetting, setStoryLength } = useStoryStore();
+  const { setWorldSetting, setStoryLength, setGenreSetting } = useStoryStore();
   const [world, setWorld] = useState("");
   const [length, setLength] = useState(50);
   const [isLoading, setIsLoading] = useState(false);
+  const [localGenres, setLocalGenres] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
 
   //가이드패널
   const [showGuide, setShowGuide] = useState(false);
@@ -100,10 +102,26 @@ ${
     setIsLoading(true);
     setWorldSetting(world);
     setStoryLength(length);
-
+    setGenreSetting(localGenres);
     setTimeout(() => {
       router.push("/story/play");
     }, 600);
+  };
+
+  //장르구분함수
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue && !localGenres.includes(trimmedValue)) {
+        setLocalGenres((prev) => [...prev, trimmedValue]);
+      }
+      setInputValue("");
+    }
+  };
+
+  const removeGenre = (genre: string) => {
+    setLocalGenres((prev) => prev.filter((g) => g !== genre));
   };
 
   return (
@@ -206,6 +224,48 @@ ${
                     onChange={(e) => setWorld(e.target.value)}
                     placeholder="예: 마법이 존재하는 중세 판타지 세계에서 용과 인간이 공존하는 왕국, 주인공은 17세 견습 마법사 등 자세한 설정을 입력해주세요."
                     className="w-full p-4 text-lg border border-gray-200 rounded-lg h-40 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xl font-semibold mb-3 text-gray-800 flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 mr-3 text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    장르 설정
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {localGenres.map((genre) => (
+                      <div
+                        key={genre}
+                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center"
+                      >
+                        {genre}
+                        <button
+                          className="ml-2 text-red-500"
+                          onClick={() => removeGenre(genre)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <input
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="예: 로맨스, 판타지, 중세, 무협, ..."
+                    className="w-full p-4 text-lg border border-gray-200 rounded-lg h-15 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
                   />
                 </div>
 

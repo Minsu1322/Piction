@@ -53,7 +53,7 @@ export default function Login() {
           {/* 구글 로그인 버튼 */}
           <button
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl text-gray-700 font-medium transition-all duration-300 bg-white border border-gray-300 hover:bg-gray-50"
+            className="flex items-center cursor-pointer justify-center gap-3 w-full py-3 rounded-xl text-gray-700 font-medium transition-all duration-300 bg-white border border-gray-300 hover:bg-gray-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
