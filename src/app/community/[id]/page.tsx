@@ -8,8 +8,8 @@ import { Comment } from "@/components/types/types";
 
 export default function PostDetail() {
   const { id } = useParams();
-  const { user } = useAuthStore();
   const router = useRouter();
+  const { user } = useAuthStore();
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -41,6 +41,23 @@ export default function PostDetail() {
     }
   }, [id]);
 
+  //게시글 삭제(user_id == user.id)
+  const handleDeletePost = async () => {
+    if (!confirm("정말로 이 글을 삭제하시겠습니까?")) return;
+
+    const response = await fetch(`/api/community/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("게시글이 삭제되었습니다.");
+      router.push("/community");
+    } else {
+      alert("게시글 삭제에 실패했습니다.");
+    }
+  };
+
+  // 댓글 작성
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return alert("댓글을 입력하세요.");
 
@@ -59,7 +76,6 @@ export default function PostDetail() {
       return alert(result.error || "댓글 작성 중 오류가 발생했습니다.");
     }
 
-    const newCommentData = await response.json();
     setNewComment("");
 
     const commentsResponse = await fetch(
@@ -68,7 +84,8 @@ export default function PostDetail() {
     const updatedComments = await commentsResponse.json();
     setComments(updatedComments);
   };
-  // ✅ 댓글 삭제
+
+  // 댓글 삭제
   const handleDeleteComment = async (commentId: number) => {
     if (!confirm("댓글을 삭제하시겠습니까?")) return;
 
@@ -94,6 +111,14 @@ export default function PostDetail() {
         <p className="text-sm text-gray-500 mt-4">
           작성일: {new Date(post.created_at).toLocaleString()}
         </p>
+        {user?.id === post.user_id && (
+          <button
+            onClick={handleDeletePost}
+            className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+          >
+            게시글 삭제
+          </button>
+        )}
       </div>
 
       {/* ✅ 댓글 입력 */}

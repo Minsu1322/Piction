@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  // 커뮤니티 게시글을 가져옵니다
   const { data: posts, error: postsError } = await supabase
     .from("community")
     .select("id, created_at, title");
@@ -34,7 +33,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const { title, content, user_id } = await req.json();
+  const { title, content } = await req.json();
 
   if (!title || !content) {
     return NextResponse.json(
