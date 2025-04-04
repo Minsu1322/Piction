@@ -8,7 +8,7 @@ import FeatureSection from "@/components/section/FeatureSection";
 export default function Home() {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-white via-beige-100 to-stone-200 flex px-20 flex-col p-4 overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-white via-beige-100 to-stone-200 flex flex-col p-4 overflow-hidden">
         <HomePreset />
         <FeatureSection />
 
