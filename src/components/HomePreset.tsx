@@ -12,11 +12,12 @@ import { presets } from "./Preset.tsx";
 
 export default function HomePreset() {
   const router = useRouter();
-  const { setWorldSetting, setStoryLength } = useStoryStore();
+  const { setWorldSetting, setStoryLength, setGenreSetting } = useStoryStore();
 
-  const handlePresetClick = (world: string, length: number) => {
+  const handlePresetClick = (world: string, length: number, tags: string[]) => {
     setWorldSetting(world);
     setStoryLength(length);
+    setGenreSetting(tags);
     router.push("/story/play");
   };
 
@@ -83,7 +84,7 @@ export default function HomePreset() {
                       scale: isActive ? 1 : 0.9,
                     }}
                     transition={{ duration: 0.5 }}
-                    className={`overflow-hidden shadow-md transition-all bg-[#D9D9D9] duration-300 ${
+                    className={`overflow-hidden shadow-md transition-all bg-gray-300 duration-300 ${
                       isActive
                         ? "w-[800px] h-[390px] rounded-2xl"
                         : "w-[220px] h-[350px] rounded-xl"
@@ -144,7 +145,9 @@ export default function HomePreset() {
                               whileHover={{ scale: 1.03 }}
                               whileTap={{ scale: 0.98 }}
                               className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
-                              onClick={() => handlePresetClick(world, length)}
+                              onClick={() =>
+                                handlePresetClick(world, length, tags)
+                              }
                             >
                               <PlayIcon className="w-4 h-4" />
                               추천 스토리로 시작
