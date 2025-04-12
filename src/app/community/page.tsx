@@ -28,7 +28,7 @@ export default function CommunityPage() {
   }, []);
 
   return (
-    <div className="max-w-450 mx-auto p-6 rounded-lg shadow-sm">
+    <div className="max-w-450 mx-auto p-6 rounded-lg">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">커뮤니티</h1>
         <Link
@@ -48,7 +48,7 @@ export default function CommunityPage() {
           <p className="mt-2 text-gray-500">첫 번째 글을 작성해 보세요!</p>
         </div>
       ) : (
-        <div className="border-t bg-white border-gray-100">
+        <div className="border-t rounded-2xl bg-white border-gray-100">
           {/* 게시글 목록 */}
           {posts.map((post) => (
             <Link
@@ -58,7 +58,7 @@ export default function CommunityPage() {
             >
               <div className="grid grid-cols-12 py-4 px-4 items-center border-b border-gray-100 hover:bg-gray-50 transition-colors">
                 <div className="col-span-8">
-                  <h2 className="text-2xl font-bold text-gray-800 line-clamp-1">
+                  <h2 className="text-xl font-bold text-gray-800 line-clamp-1">
                     {post.title}
                   </h2>
                   <p className="mt-1 text-lg text-gray-500 line-clamp-1">
