@@ -36,16 +36,9 @@ export default function Header() {
       <nav className="flex items-center text-lg font-medium text-gray-800 ml-auto mr-8">
         <Link
           href="/community"
-          className="px-4 py-2 transition cursor-pointer hover:text-blue-500"
-        >
-          커뮤니티
-        </Link>
-        <span className="text-blue-500">|</span>
-        <Link
-          href="/shareStory"
           className="px-4 py-2 transition cursor-pointer hover:text-purple-500"
         >
-          이야기 공유
+          커뮤니티
         </Link>
       </nav>
 

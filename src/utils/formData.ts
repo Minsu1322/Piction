@@ -1,24 +1,20 @@
-//날짜 관리 함수
-
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
-  const diffTime = Math.abs(now.getTime() - date.getTime());
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diffMs = now.getTime() - date.getTime();
 
-  if (diffDays < 1) {
-    // 오늘
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `오늘 ${hours}:${minutes < 10 ? "0" + minutes : minutes}`;
-  } else if (diffDays === 1) {
-    // 어제
-    return "어제";
-  } else if (diffDays < 7) {
-    // 일주일 내
-    return `${diffDays}일 전`;
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (seconds < 60) {
+    return `${seconds}초 전`;
+  } else if (minutes < 60) {
+    return `${minutes}분 전`;
+  } else if (hours < 24) {
+    return `${hours}시간 전`;
   } else {
-    // 일주일 이상
-    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+    return `${days}일 전`;
   }
 }

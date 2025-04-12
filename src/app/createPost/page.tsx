@@ -44,30 +44,52 @@ export default function CreatePostPage() {
   };
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">새 글 작성</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="제목을 입력하세요"
-          className="w-full p-3 border rounded-md text-gray-800"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          placeholder="내용을 입력하세요"
-          className="w-full p-3 border rounded-md text-gray-800 h-40"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="w-full py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition"
-          disabled={loading}
+    <div className="container mx-auto px-6 py-10">
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">새 글 작성</h1>
+
+      {/* Content Card */}
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col h-full flex-grow"
         >
-          {loading ? "작성 중..." : "작성하기"}
+          {/* Title Input */}
+          <div className="p-6 w-full">
+            <input
+              type="text"
+              placeholder="제목을 입력하세요"
+              className="w-full text-2xl font-medium text-gray-800 focus:outline-none"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div className="h-px bg-gray-300"></div>
+
+          {/* Content Input */}
+          <div className="flex-grow p-6 min-h-0">
+            <textarea
+              placeholder={`내용을 입력하세요. 
+모든 글은 익명으로 작성됩니다.`}
+              className="w-full h-[calc(100vh-500px)] text-lg text-gray-700 focus:outline-none resize-none overflow-y-scroll"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+        </form>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={handleSubmit}
+          className="px-12 py-4 bg-blue-500 text-white text-lg font-medium rounded-xl hover:bg-blue-600 transition-colors shadow-md disabled:bg-blue-300 disabled:cursor-not-allowed"
+          disabled={loading || !title || !content}
+        >
+          {loading ? "작성 중..." : "작성 완료"}
         </button>
-      </form>
-    </main>
+      </div>
+    </div>
   );
 }

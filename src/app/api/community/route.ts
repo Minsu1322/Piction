@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const { data: posts, error: postsError } = await supabase
     .from("community")
-    .select("id, created_at, title");
+    .select("id, created_at, content, title");
 
   if (postsError) {
     return NextResponse.json({ error: postsError.message }, { status: 500 });
