@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/authStore";
 import { Comment } from "@/components/types/types";
 import { FiClock, FiEye, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 import { formatDate } from "@/utils/formData";
+import Spinner from "@/components/LoadingComponents/LoginLoading";
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -118,7 +119,7 @@ export default function PostDetail() {
     // 실제 API 호출 코드는 나중에 구현
   };
 
-  if (loading) return <p className="text-center">로딩 중...</p>;
+  if (loading) return <Spinner />;
   if (!post) return <p className="text-center">해당 글을 찾을 수 없습니다.</p>;
 
   return (
