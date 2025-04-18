@@ -10,7 +10,7 @@ export default function ChoiceButtons({
   onSelect,
 }: ChoiceButtonsProps) {
   return (
-    <div className="flex flex-col gap-4 mt-auto">
+    <div className="flex gap-4">
       {choices.map((choice, index) => {
         const choiceText = choice.replace(/^\d+\.|\d+\)\s*/, "").trim();
         const choiceNumber = index + 1;
@@ -19,7 +19,7 @@ export default function ChoiceButtons({
           <button
             key={index}
             onClick={() => onSelect(choice)}
-            className="bg-gradient-to-r from-blue-300 to-purple-300 text-black py-3 px-5 rounded-lg text-xl shadow hover:opacity-90 transition active:scale-[0.98]"
+            className="bg-gray-400 text-black cursor-pointer flex-1 py-5 px-6 rounded-xl text-base shadow hover:opacity-75 transition active:scale-[0.98]"
           >
             {choiceNumber}. {choiceText}
           </button>

@@ -39,7 +39,7 @@ export default function StoryGenerator() {
   const generateInitialStory = async () => {
     setLoading(true);
     setErrorMessage("");
-
+    setStoryProgress(0);
     const promptData = `세계관: ${worldSetting}\n분량 수: ${storyLength}\n장르: ${GenreSetting}
   
   지시사항:
@@ -100,6 +100,8 @@ export default function StoryGenerator() {
   const generateStory = async (userChoice?: string) => {
     setLoading(true);
     setErrorMessage("");
+    console.log(storyProgress);
+    console.log(storyLength);
 
     const isFinalStep = storyProgress + 1 >= storyLength;
     const randomEventChance = Math.random() * 100; // 0-100 사이의 난수 생성
@@ -120,7 +122,7 @@ export default function StoryGenerator() {
         "   - " +
         (isFinalStep
           ? "이야기를 완결한다"
-          : "이야기 후에 '------' 제목 아래 2~4개의 선택지를 제공한다") +
+          : "이야기 후에 '------' 제목 아래 3개의 선택지를 제공한다") +
         "\n" +
         "   - 선택지와 스토리가 섞이지 않도록 한다\n\n" +
         "2. 스토리 작성 지침:\n" +
@@ -166,11 +168,14 @@ export default function StoryGenerator() {
         worldSetting +
         "\n분량 수: " +
         storyLength +
+        "이며" +
+        storyProgress +
+        "가 분량수 에 근접해갈수록 완결로 가는 전개를 펼쳐라" +
         "\n\n" +
         "지시사항:\n" +
         "1. 다음 형식을 정확히 따라 응답을 구성하라:\n" +
         "   - 먼저 '### 스토리' 제목 아래 한국 인기 웹소설 스타일로 몰입감 높은 스토리를 전개한다\n" +
-        "   - 스토리가 끝난 후 '### 선택지' 제목 아래 독자가 고민할 만한 2~4개의 선택지를 제공한다\n" +
+        "   - 스토리가 끝난 후 '### 선택지' 제목 아래 독자가 고민할 만한 3개의 선택지를 제공한다\n" +
         "   - 선택지와 스토리가 섞이지 않도록 한다\n\n" +
         "2. 세계관 구축과 캐릭터 소개:\n" +
         "   - 주인공의 외모, 성격, 배경을 생생하게 묘사하라 (특징적인 외모, 트라우마, 숨겨진 능력 등)\n" +
@@ -289,13 +294,13 @@ export default function StoryGenerator() {
   };
 
   return (
-    <div className="w-full flex h-full">
+    <div className="w-full h-full">
       {/* 스토리 영역 (좌측) */}
-      <div className="w-2/3 h-full overflow-y-auto scrollbar-hide pr-6">
-        <h1 className="text-3xl font-bold mb-4">📖 생성된 스토리</h1>
+      <div className="overflow-y-auto scrollbar-hide pr-6">
+        <h1 className="text-2xl font-bold mb-4">📖이야기 진행중</h1>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="story-content mb-6">
-          <p className="whitespace-pre-wrap text-xl">{story}</p>
+          <p className="whitespace-pre-wrap text-lg">{story}</p>
         </div>
         {/* {loading && <p className="text-xl">스토리 생성 중...</p>} */}
         {loading && (
@@ -303,7 +308,7 @@ export default function StoryGenerator() {
             {!story ? (
               <StoryLoading />
             ) : (
-              <p className="text-xl">스토리 생성 중...</p>
+              <p className="text-lg">스토리 생성 중...</p>
             )}
           </>
         )}
@@ -339,13 +344,9 @@ export default function StoryGenerator() {
       </div>
 
       {/* 선택지 영역 (우측) */}
-      <div className="w-1/3 h-full pl-6 border-l border-gray-200 flex flex-col">
-        <h2 className="text-2xl font-bold mb-4">✨ 선택지</h2>
-
+      <div className="mt-5">
         {choices.length > 0 ? (
-          <div className="flex-grow">
-            <ChoiceButtons choices={choices} onSelect={generateStory} />
-          </div>
+          <ChoiceButtons choices={choices} onSelect={generateStory} />
         ) : (
           <div className="flex-grow flex items-center justify-center">
             <p className="text-gray-500 italic">
