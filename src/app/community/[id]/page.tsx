@@ -123,7 +123,7 @@ export default function PostDetail() {
   if (!post) return <p className="text-center">해당 글을 찾을 수 없습니다.</p>;
 
   return (
-    <main className="max-w-450 mx-auto p-6">
+    <main className="max-w-350 mx-auto p-6">
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         {/* 헤더 영역: 제목(좌측), 조회수/작성시간(우측) */}
         <div className="p-6 border-b border-gray-400">

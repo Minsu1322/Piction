@@ -35,7 +35,7 @@ export default function Header() {
       {/* 네비게이션 탭 */}
       <nav className="flex items-center text-lg font-medium text-gray-800 ml-auto mr-8">
         <Link
-          href="/community"
+          href="/community/category"
           className="px-4 py-2 transition cursor-pointer hover:text-purple-500"
         >
           커뮤니티
