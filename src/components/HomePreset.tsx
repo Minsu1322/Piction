@@ -87,7 +87,7 @@ export default function HomePreset() {
                     className={`overflow-hidden shadow-md transition-all bg-gray-300 duration-300 ${
                       isActive
                         ? "w-[800px] h-[390px] rounded-2xl"
-                        : "w-[220px] h-[350px] rounded-xl"
+                        : "w-[250px] h-[350px] rounded-xl"
                     }`}
                   >
                     {isActive ? (
@@ -160,7 +160,7 @@ export default function HomePreset() {
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: 0.2, duration: 0.5 }}
-                          className="w-full lg:w-2/5 h-full relative overflow-hidden"
+                          className="w-full lg:w-3/5 h-full relative overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent z-10" />
                           <Image

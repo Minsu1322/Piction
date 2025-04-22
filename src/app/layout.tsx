@@ -18,9 +18,7 @@ export default function RootLayout({
       <body>
         <div className="relative h-screen w-full flex flex-col">
           {/* 메인 콘텐츠 */}
-          <div
-            className={`relative z-10 flex flex-col h-full bg-gradient-to-br from-white via-beige-100 to-stone-200`}
-          >
+          <div className={`relative z-10 flex flex-col h-full`}>
             <AuthProvider>
               <Header />
               <main>{children}</main>
