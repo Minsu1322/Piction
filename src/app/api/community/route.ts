@@ -10,9 +10,9 @@ export async function GET() {
     return NextResponse.json({ error: postsError.message }, { status: 500 });
   }
 
-  const postsWithCommentCount = await Promise.all(
+  const postsWithCommentAndLikesCount = await Promise.all(
     posts.map(async (post) => {
-      const { count, error: commentError } = await supabase
+      const { count: commentCount, error: commentError } = await supabase
         .from("comments")
         .select("id", { count: "exact", head: true })
         .eq("community_id", post.id);
@@ -22,14 +22,24 @@ export async function GET() {
         return { ...post, comment_count: 0 };
       }
 
+      const { count: likesCount, error: likeError } = await supabase
+        .from("likes")
+        .select("id", { count: "exact", head: true })
+        .eq("community_id", post.id);
+
+      if (likeError) {
+        console.error("좋아요 수 조회 오류:", likeError);
+      }
+
       return {
         ...post,
-        comment_count: count || 0,
+        comment_count: commentCount || 0,
+        likes_count: likesCount || 0,
       };
     })
   );
 
-  return NextResponse.json(postsWithCommentCount, { status: 200 });
+  return NextResponse.json(postsWithCommentAndLikesCount, { status: 200 });
 }
 
 export async function POST(req: Request) {

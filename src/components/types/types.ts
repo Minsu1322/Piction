@@ -4,7 +4,9 @@ export interface Post {
   user_id: string;
   title: string;
   content: string;
-  comment_count: string;
+  comment_count: number;
+  likes_count: number;
+  hasLiked: boolean;
 }
 
 export interface Comment {

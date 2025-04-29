@@ -24,7 +24,7 @@ export default function Header() {
       {/* 로고 */}
       <Link href="/">
         <Image
-          src="/Piction_Logo.png"
+          src="/Piction_Logo1.png"
           alt="Piction Logo"
           width={120}
           height={40}

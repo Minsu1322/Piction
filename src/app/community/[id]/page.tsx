@@ -21,6 +21,7 @@ export default function PostDetail() {
   // New states for likes
   const [likeCount, setLikeCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -31,6 +32,18 @@ export default function PostDetail() {
         .single();
       if (error) console.error("글을 불러오는 중 오류 발생:", error);
       else setPost(data);
+
+      const { count: likesCount, error: likeError } = await supabase
+        .from("likes")
+        .select("user_id", { count: "exact", head: true })
+        .eq("community_id", data.id);
+
+      if (likeError) {
+        console.error("좋아요 수 조회 오류:", likeError);
+      } else if (likesCount !== null) {
+        setLikeCount(likesCount);
+      }
+
       setLoading(false);
     };
 
@@ -42,11 +55,32 @@ export default function PostDetail() {
       setComments(data);
     };
 
+    const checkUserLiked = async () => {
+      if (user) {
+        try {
+          const response = await fetch(
+            `/api/community/Likes?communityId=${id}`
+          );
+          const data = await response.json();
+
+          if (data.users && Array.isArray(data.users)) {
+            const userLiked = data.users.some(
+              (like: any) => like.user_id === user.id
+            );
+            setHasLiked(userLiked);
+          }
+        } catch (error) {
+          console.error("좋아요 상태 확인 중 오류 발생:", error);
+        }
+      }
+    };
+
     if (id) {
       fetchPost();
       fetchComments();
+      checkUserLiked();
     }
-  }, [id]);
+  }, [id, user]);
 
   //게시글 삭제
   const handleDeletePost = async () => {
@@ -107,16 +141,54 @@ export default function PostDetail() {
     }
   };
 
-  // 추천하기 기능 (미구현 - 나중에 API 연결)
-  const handleLike = () => {
-    if (hasLiked) {
-      setLikeCount(likeCount - 1);
-      setHasLiked(false);
-    } else {
-      setLikeCount(likeCount + 1);
-      setHasLiked(true);
+  // 추천하기 기능
+  const handleLikeClick = async () => {
+    if (!user) {
+      alert("로그인한 사용자만 추천할 수 있습니다.");
+      return;
     }
-    // 실제 API 호출 코드는 나중에 구현
+
+    setIsLikeLoading(true);
+
+    try {
+      const response = await fetch("/api/community/Likes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          communityId: id,
+          userId: user.id,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // 좋아요 상태 토글
+        setHasLiked(!hasLiked);
+
+        // 좋아요 수 새로고침
+        const { count: newLikesCount, error: likeCountError } = await supabase
+          .from("likes")
+          .select("user_id", { count: "exact", head: true })
+          .eq("community_id", id);
+
+        if (likeCountError) {
+          console.error("좋아요 수 새로고침 오류:", likeCountError);
+        } else if (newLikesCount !== null) {
+          setLikeCount(newLikesCount);
+        }
+      } else {
+        console.error("추천 처리 중 오류 발생:", result.error);
+        alert("추천 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("추천 처리 중 예외 발생:", error);
+      alert("추천 처리 중 오류가 발생했습니다.");
+    } finally {
+      setIsLikeLoading(false);
+    }
   };
 
   if (loading) return <Spinner />;
@@ -149,15 +221,17 @@ export default function PostDetail() {
           {/* 추천 버튼 영역 */}
           <div className="flex justify-center mt-6">
             <button
-              onClick={handleLike}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+              onClick={handleLikeClick}
+              disabled={isLikeLoading}
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-full ${
                 hasLiked
-                  ? "bg-blue-100 text-blue-600"
-                  : "bg-gray-100 text-gray-600"
+                  ? "bg-sky-100 text-sky-600" // 좋아요 상태일 때 푸른색 계열
+                  : "bg-gray-100 text-gray-600" // 좋아요 상태가 아닐 때 회색
               } transition-colors`}
             >
               <FiThumbsUp className="w-5 h-5" />
-              추천하기 {likeCount > 0 && `(${likeCount})`}
+              {hasLiked ? "추천됨" : "추천하기"}{" "}
+              {likeCount > 0 && `(${likeCount})`}
             </button>
           </div>
 
