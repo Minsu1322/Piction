@@ -4,6 +4,7 @@ import { useStoryStore } from "@/store/storyStore";
 import StoryGenerator from "@/components/StoryGenerator";
 import { Noto_Sans_KR } from "next/font/google";
 import { useState } from "react";
+import Link from "next/link";
 
 const NotoFont = Noto_Sans_KR({ weight: "400", subsets: ["latin"] });
 
@@ -28,29 +29,51 @@ export default function PlayStoryPage() {
 
   return (
     <div
-      className={`h-[90vh] flex flex-col items-center justify-center p-4 pt-0 ${NotoFont.className}`}
+      className={`h-[90vh] flex flex-col items-center justify-center p-4 pt-10 ${NotoFont.className}`}
+      style={{
+        backgroundImage: 'url("/story_bg.svg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      <div className="w-full max-w-[95%] h-[90vh] flex flex-col rounded-xl overflow-hidden relative">
+      <div className="w-full max-w-[85%] h-[90vh] flex flex-col rounded-xl overflow-hidden relative">
         <div className="relative w-full h-full flex flex-col bg-white rounded-xl overflow-hidden">
-          {/* 좌측상단 버튼/진행도 영역 */}
-          <div className="top-4 left-4 flex items-center space-x-4">
-            <button
-              onClick={() => setShowOverlay(true)}
-              className="py-2 px-6 rounded-2xl text-white bg-gray-500 hover:bg-gray-700 transition cursor-pointer text-sm whitespace-nowrap"
+          {/* 상단 네비게이션 바 */}
+          <div className="absolute top-4 left-0 w-full flex gap-4 px-6">
+            {/* 뒤로가기 링크 */}
+            <Link
+              href="/"
+              className="flex items-center text-gray-700 hover:text-blue-500 transition text-xl font-bold"
             >
-              세계관 보기
-            </button>
-            {/* 진행도 막대 */}
-            <div className="w-full h-4 bg-gray-300 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-blue-500"
-                style={{ width: `${progressPercent}%` }}
-              ></div>
+              &lt;
+            </Link>
+
+            {/* 중앙 텍스트 + 세계관 보기 */}
+            <div className="flex space-x-4">
+              <p className="text-gray-800 text-lg font-semibold whitespace-nowrap">
+                이야기 진행중...
+              </p>
+              <button
+                onClick={() => setShowOverlay(true)}
+                className="text-blue-500 hover:underline text-sm"
+              >
+                세계관 설정 보기
+              </button>
             </div>
-            {/* 진행도 퍼센트 */}
-            <span className="text-black font-semibold mr-20">
-              {progressPercent}%
-            </span>
+
+            {/* 진행도 바 + 퍼센트 */}
+            <div className="flex items-center space-x-2 w-1/3 min-w-[200px] ml-auto">
+              <div className="w-full h-2 bg-gray-300 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-blue-500"
+                  style={{ width: `${progressPercent}%` }}
+                ></div>
+              </div>
+              <span className="text-sm text-gray-700 font-medium whitespace-nowrap">
+                {progressPercent}%
+              </span>
+            </div>
           </div>
 
           {/* 오버레이 및 블러 배경 */}
@@ -100,11 +123,8 @@ export default function PlayStoryPage() {
             </div>
           )}
 
-          {/* 구분선 */}
-          <div className="w-full h-[1px] bg-gray-300"></div>
-
           {/* 스토리 영역 */}
-          <div className="w-full h-full pt-12">
+          <div className="w-full h-[95%] pt-12">
             <div className="h-full p-6 overflow-y-auto scrollbar-hide">
               <StoryGenerator />
             </div>

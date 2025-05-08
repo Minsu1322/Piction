@@ -20,15 +20,15 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full py-4 px-6 flex justify-between items-center bg-white shadow-md">
+    <header className="w-full py-4 px-6 flex justify-between items-center bg-blue-300 shadow-md">
       {/* 로고 */}
       <Link href="/">
         <Image
           src="/Piction_Logo1.png"
           alt="Piction Logo"
           width={120}
-          height={40}
-          style={{ width: "auto", height: "auto" }}
+          height={80}
+          layout="intrinsic"
         />
       </Link>
 

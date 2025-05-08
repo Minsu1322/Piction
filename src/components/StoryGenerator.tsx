@@ -295,8 +295,8 @@ export default function StoryGenerator() {
 
   return (
     <div className="w-full h-full">
-      {/* 스토리 영역 (좌측) */}
-      <div className="overflow-y-auto scrollbar-hide pr-6">
+      {/* 스토리 영역 (상단단) */}
+      <div className="overflow-y-auto scrollbar-hide px-30">
         <h1 className="text-2xl font-bold mb-4">📖이야기 진행중</h1>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="story-content mb-6">
@@ -343,8 +343,8 @@ export default function StoryGenerator() {
         )}
       </div>
 
-      {/* 선택지 영역 (우측) */}
-      <div className="mt-5">
+      {/* 선택지 영역 (하단단) */}
+      <div className="mt-5 p-6 bg-[#D6E0FF] rounded-2xl border-[#92ACFF] border-2">
         {choices.length > 0 ? (
           <ChoiceButtons choices={choices} onSelect={generateStory} />
         ) : (

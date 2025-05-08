@@ -13,15 +13,14 @@ export default function ChoiceButtons({
     <div className="flex gap-4">
       {choices.map((choice, index) => {
         const choiceText = choice.replace(/^\d+\.|\d+\)\s*/, "").trim();
-        const choiceNumber = index + 1;
 
         return (
           <button
             key={index}
             onClick={() => onSelect(choice)}
-            className="bg-gray-400 text-black cursor-pointer flex-1 py-5 px-6 rounded-xl text-base shadow hover:opacity-75 transition active:scale-[0.98]"
+            className="bg-white text-black cursor-pointer flex-1 py-20 px-6 rounded-xl text-lg shadow hover:opacity-75 hover:text-[#385DD9] transition active:scale-[0.98]"
           >
-            {choiceNumber}. {choiceText}
+            {choiceText}
           </button>
         );
       })}

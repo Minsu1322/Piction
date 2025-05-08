@@ -22,15 +22,40 @@ export default function HomePreset() {
   };
 
   return (
-    <div className="w-full min-h-screen py-16">
-      <div className="mx-auto">
+    <div
+      className="w-full bg-red-400 py-16"
+      style={{
+        backgroundImage: 'url("/main-image-large 1.svg")',
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "top",
+        height: "680px",
+      }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url("/main-image-large 1.svg")',
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "top",
+        }}
+      ></div>
+      <div
+        className="absolute inset-x-0 bottom-0"
+        style={{
+          height: "50px",
+          background: "linear-gradient(to bottom, transparent, #EDF2FF)",
+        }}
+      ></div>
+      <div className="mx-auto relative">
         {/* Main Hero Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 z-50">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-black"
+            className="text-5xl mb-6 bg-clip-text text-white bg-black"
           >
             당신의 선택으로 펼쳐지는 이야기를 만들어보세요
           </motion.h1>
@@ -38,7 +63,7 @@ export default function HomePreset() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-lg text-gray-600 max-w-3xl mx-auto"
+            className="text-lg text-white max-w-3xl mx-auto"
           >
             AI 기술을 활용하여 누구나 쉽게 자신만의 이야기를 만들 수 있는
             서비스입니다. <br />
@@ -84,9 +109,9 @@ export default function HomePreset() {
                       scale: isActive ? 1 : 0.9,
                     }}
                     transition={{ duration: 0.5 }}
-                    className={`overflow-hidden shadow-md transition-all bg-gray-300 duration-300 ${
+                    className={`overflow-hidden shadow-md transition-all bg-white duration-300 ${
                       isActive
-                        ? "w-[800px] h-[390px] rounded-2xl"
+                        ? "w-[900px] h-[390px] rounded-2xl"
                         : "w-[250px] h-[350px] rounded-xl"
                     }`}
                   >
@@ -162,7 +187,7 @@ export default function HomePreset() {
                           transition={{ delay: 0.2, duration: 0.5 }}
                           className="w-full lg:w-3/5 h-full relative overflow-hidden"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent z-10" />
+                          <div className="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent" />
                           <Image
                             src={image}
                             alt={title}

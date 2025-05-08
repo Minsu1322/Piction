@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/storyStore";
 import { Nanum_Pen_Script } from "next/font/google";
 const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
+import Image from "next/image";
 
 export default function NewStoryPage() {
   const router = useRouter();
@@ -125,14 +126,17 @@ ${
   };
 
   return (
-    <div className={`min-h-screen w-full bg-gray-50 ${nanumFont.className}`}>
+    <div
+      className={`min-h-screen w-full bg-red-50 ${nanumFont.className}`}
+      style={{
+        backgroundImage: 'url("/story_bg.svg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {" "}
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-5 pointer-events-none">
-        <div className="absolute -right-20 -top-20 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>
-        <div className="absolute -left-20 top-1/3 w-80 h-80 bg-purple-400 rounded-full blur-3xl"></div>
-        <div className="absolute right-1/4 bottom-1/4 w-72 h-72 bg-blue-400 rounded-full blur-3xl"></div>
-      </div>
-
       <div className="container mx-auto px-4 py-16 relative z-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
@@ -389,7 +393,6 @@ ${
           </div>
         </div>
       </div>
-
       {/* 가이드 패널 */}
       {showGuide && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-xs flex items-center justify-center z-50 p-4">
