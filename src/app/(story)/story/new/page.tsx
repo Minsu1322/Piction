@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/storyStore";
 import { Nanum_Pen_Script } from "next/font/google";
 const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
-import Image from "next/image";
 
 export default function NewStoryPage() {
   const router = useRouter();
