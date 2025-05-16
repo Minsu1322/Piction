@@ -1,16 +1,12 @@
 "use client";
 
 import CommunityHeader from "@/components/community/Header";
-import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { shareStory } from "@/components/types/types";
-import { formatDate } from "@/utils/formData";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 
 export default function ShareStoryPage() {
   const [posts, setPosts] = useState<shareStory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState<"latest" | "recommend">(
     "latest"
   );
@@ -23,8 +19,6 @@ export default function ShareStoryPage() {
         setPosts(data);
       } catch (error) {
         console.error("Error fetching community posts:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
