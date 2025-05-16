@@ -17,3 +17,14 @@ export interface Comment {
   created_at: string;
   anonymous_name: number;
 }
+
+export interface shareStory {
+  id: string;
+  created_at: string;
+  user_id: string;
+  story_content: string;
+  genre: string;
+  cover_image: string;
+  likes_count: number;
+  story_title: string;
+}

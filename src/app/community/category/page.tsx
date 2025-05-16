@@ -6,7 +6,7 @@ import { Post } from "@/components/types/types";
 import { formatDate } from "@/utils/formData";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FiEdit, FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
+import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -46,49 +46,49 @@ export default function CommunityPage() {
 
   return (
     <div className="max-w-350 mx-auto p-6 rounded-lg">
-      <div className="flex justify-between items-center mb-6">
-        <CommunityHeader />
-        <Link
-          href="/createPost"
-          className="px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
-        >
-          <FiEdit className="w-4 h-4" />
-          <span>새 글 작성</span>
-        </Link>
-      </div>
-
-      {/* 정렬 옵션 버튼 */}
-      <div className="flex justify-end mb-4 gap-2">
-        <button
-          onClick={() => setSortOption("latest")}
-          className={`px-3 py-1 text-sm rounded-full border ${
-            sortOption === "latest"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          최신순
-        </button>
-        <button
-          onClick={() => setSortOption("recommend")}
-          className={`px-3 py-1 text-sm rounded-full border ${
-            sortOption === "recommend"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          추천순
-        </button>
-        <button
-          onClick={() => setSortOption("comment")}
-          className={`px-3 py-1 text-sm rounded-full border ${
-            sortOption === "comment"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 text-gray-700"
-          }`}
-        >
-          댓글순
-        </button>
+      <CommunityHeader />
+      <div className="flex justify-between border-b-[0.5px] border-b-[#A5ABB4]">
+        {/* 정렬 옵션 버튼 */}
+        <div className="flex pl-4 justify mb-4 gap-2">
+          <button
+            onClick={() => setSortOption("latest")}
+            className={`px-3 py-1 text-sm rounded-full ${
+              sortOption === "latest"
+                ? "font-bold"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            • 최신순
+          </button>
+          <button
+            onClick={() => setSortOption("recommend")}
+            className={`px-3 py-1 text-sm rounded-full ${
+              sortOption === "recommend"
+                ? "font-bold"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            • 추천순
+          </button>
+          <button
+            onClick={() => setSortOption("comment")}
+            className={`px-3 py-1 text-sm rounded-full ${
+              sortOption === "comment"
+                ? "font-bold"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            • 댓글순
+          </button>
+        </div>
+        <div className="flex justify-between items-center mb-6">
+          <Link
+            href="/createPost"
+            className="px-6 py-2 rounded-xl bg-[#4F78FF] text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
+          >
+            <span>글쓰기</span>
+          </Link>
+        </div>
       </div>
 
       {loading ? (
@@ -107,25 +107,30 @@ export default function CommunityPage() {
               href={`/community/${post.id}`}
               className="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors"
             >
-              <div className="flex flex-col">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {post.title}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                  {post.content}
-                </p>
-                <div className="flex items-center text-xs text-gray-400 mt-2 gap-4">
+              <div className="flex justify-between border-b-[0.5px] border-b-[#A5ABB4] pb-6">
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {post.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                    {post.content}
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center text-xs text-gray-400 mt-2 gap-4">
                   <div className="flex items-center gap-1">
                     <FiClock className="w-3 h-3" />
                     <span>{formatDate(post.created_at)}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <FiThumbsUp className="w-3 h-3" />
-                    <span>{post.likes_count}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FiMessageSquare className="w-3 h-3" />
-                    <span>{post.comment_count}</span>
+                  <div className="flex gap-4">
+                    <div className="flex items-center gap-1">
+                      <FiThumbsUp className="w-3 h-3" />
+                      <span>{post.likes_count}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FiMessageSquare className="w-3 h-3" />
+                      <span>{post.comment_count}</span>
+                    </div>
                   </div>
                 </div>
               </div>

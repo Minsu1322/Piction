@@ -18,7 +18,7 @@ export default function PostDetail() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
 
-  // New states for likes
+  // 좋아요
   const [likeCount, setLikeCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
