@@ -42,7 +42,7 @@ export default function ShareStoryPage() {
       <CommunityHeader />
 
       {/* 장르 선택 UI */}
-      <div className="flex  justify-between flex-wrap gap-3 mb-6 text-sm font-medium text-gray-600">
+      <div className="flex justify-between flex-wrap gap-3 mb-6 text-sm font-medium text-gray-600">
         <div>
           <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
             전체
@@ -62,10 +62,10 @@ export default function ShareStoryPage() {
         </div>
 
         <div className="flex">
-          <div className="flex pl-4 justify mb-4">
+          <div className="flex pl-4  justify mb-4">
             <button
               onClick={() => setSortOption("latest")}
-              className={`px-3 py-1 text-sm rounded-full ${
+              className={`px-3 cursor-pointer py-1 text-sm rounded-full ${
                 sortOption === "latest" ? "text-[#373B40]" : " text-[#6E7681]"
               }`}
             >
@@ -73,7 +73,7 @@ export default function ShareStoryPage() {
             </button>
             <button
               onClick={() => setSortOption("recommend")}
-              className={`px-3 py-1 text-sm rounded-full ${
+              className={`px-3 cursor-pointer py-1 text-sm rounded-full ${
                 sortOption === "recommend" ? "text-[#373B40]" : "text-[#6E7681]"
               }`}
             >
@@ -85,7 +85,7 @@ export default function ShareStoryPage() {
               href="/createPost"
               className="px-6 py-2 rounded-xl bg-[#4F78FF] text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
             >
-              <span>글쓰기</span>
+              <span>글쓰기(미구현)</span>
             </Link>
           </div>
         </div>

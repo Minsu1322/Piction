@@ -52,7 +52,7 @@ export default function CommunityPage() {
         <div className="flex pl-4 justify mb-4 gap-2">
           <button
             onClick={() => setSortOption("latest")}
-            className={`px-3 py-1 text-sm rounded-full ${
+            className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "latest"
                 ? "font-bold"
                 : "bg-gray-100 text-gray-700"
@@ -62,7 +62,7 @@ export default function CommunityPage() {
           </button>
           <button
             onClick={() => setSortOption("recommend")}
-            className={`px-3 py-1 text-sm rounded-full ${
+            className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "recommend"
                 ? "font-bold"
                 : "bg-gray-100 text-gray-700"
@@ -72,7 +72,7 @@ export default function CommunityPage() {
           </button>
           <button
             onClick={() => setSortOption("comment")}
-            className={`px-3 py-1 text-sm rounded-full ${
+            className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "comment"
                 ? "font-bold"
                 : "bg-gray-100 text-gray-700"
