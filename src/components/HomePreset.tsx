@@ -23,7 +23,7 @@ export default function HomePreset() {
 
   return (
     <div
-      className="w-full bg-red-400 py-16"
+      className="w-full py-16"
       style={{
         backgroundImage: 'url("/main-image-large 1.svg")',
         backgroundSize: "cover",
