@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "HallymMjo-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2204@1.0/HallymMjo-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DNFForgedBlade";
+  font-style: normal;
+  font-weight: 500;
+  src: url("//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Medium.otf")
+    format("opentype");
+}
+
+@theme {
+  --font-hallym: "HallymMjo-Regular", sans-serif;
+  --font-DNFBlade: "DNFForgedBlade", sans-serif;
+}
+
+@layer utilities {
+  .font-hallym-700 {
+    font-family: var(--font-hallym);
+    font-weight: 700;
+  }
+
+  .font-DNFForgedBlade-500 {
+    font-family: var(--font-DNFBlade);
+    font-weight: 500;
+  }
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;

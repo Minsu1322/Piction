@@ -55,7 +55,7 @@ export default function HomePreset() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl mb-6 bg-clip-text text-white bg-black"
+            className="text-5xl mb-6 bg-clip-text text-white bg-black font-hallym-700"
           >
             당신의 선택으로 펼쳐지는 이야기를 만들어보세요!
           </motion.h1>
@@ -139,7 +139,7 @@ export default function HomePreset() {
 
                           {/* 제목 */}
                           <div>
-                            <h2 className="text-2xl lg:text-2xl font-bold text-gray-900 mb-2">
+                            <h2 className="text-2xl lg:text-2xl font-bold text-gray-900 mb-2 font-DNFForgedBlade-500">
                               {title}
                             </h2>
 

@@ -9,7 +9,7 @@ export default function FeatureSection() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-5xl font-bold text-center mb-24 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+          className="text-5xl font-bold text-center mb-24 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 font-hallym-700"
         >
           누구나 쉽게 이야기를 만들어보세요
         </motion.h2>
