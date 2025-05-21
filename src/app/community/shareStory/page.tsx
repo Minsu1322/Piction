@@ -10,6 +10,9 @@ export default function ShareStoryPage() {
   const [sortOption, setSortOption] = useState<"latest" | "recommend">(
     "latest"
   );
+  const [sortGenre, setSortGenre] = useState<
+    "전체" | "로맨스" | "판타지" | "스릴러" | "힐링"
+  >("전체");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -25,16 +28,21 @@ export default function ShareStoryPage() {
     fetchPosts();
   }, []);
 
-  const sortedStorySharePost = [...posts].sort((a, b) => {
-    if (sortOption === "latest") {
-      return (
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    } else if (sortOption === "recommend") {
-      return b.likes_count - a.likes_count;
-    }
-    return 0;
-  });
+  const filteredAndSortedPosts = [...posts]
+    .filter((post) => {
+      return sortGenre === "전체" || post.genre?.includes(sortGenre);
+    })
+    .sort((a, b) => {
+      if (sortOption === "latest") {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      } else if (sortOption === "recommend") {
+        return b.likes_count - a.likes_count;
+      }
+      return 0;
+    });
+  const genres = ["전체", "로맨스", "판타지", "스릴러", "액션", "힐링"];
 
   return (
     <div className="max-w-350 mx-auto p-6">
@@ -43,22 +51,21 @@ export default function ShareStoryPage() {
 
       {/* 장르 선택 UI */}
       <div className="flex justify-between flex-wrap gap-3 mb-6 text-sm font-medium text-gray-600">
-        <div>
-          <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
-            전체
-          </button>
-          <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
-            로맨스
-          </button>
-          <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
-            판타지
-          </button>
-          <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
-            스릴러
-          </button>
-          <button className="px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-blue-100 hover:text-blue-600 transition">
-            힐링
-          </button>
+        <div className="flex flex-wrap gap-2">
+          {genres.map((genre) => (
+            <button
+              key={genre}
+              onClick={() => setSortGenre(genre as typeof sortGenre)}
+              className={`px-2 text-sm transition cursor-pointer
+          ${
+            sortGenre === genre
+              ? "font-extrabold text-[#373B40]"
+              : "font-normal text-[#6E7681] hover:font-extrabold"
+          }`}
+            >
+              {genre}
+            </button>
+          ))}
         </div>
 
         <div className="flex">
@@ -82,10 +89,10 @@ export default function ShareStoryPage() {
           </div>
           <div className="flex justify-between items-center mb-6">
             <Link
-              href="/createPost"
+              href="/createShareStory"
               className="px-6 py-2 rounded-xl bg-[#4F78FF] text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
             >
-              <span>글쓰기(미구현)</span>
+              <span>글쓰기</span>
             </Link>
           </div>
         </div>
@@ -94,7 +101,7 @@ export default function ShareStoryPage() {
       {/* 이야기 카드 리스트 (1개만 구현) */}
       {/* 이야기 카드 리스트 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {sortedStorySharePost.map((post) => (
+        {filteredAndSortedPosts.map((post) => (
           <Link
             href={`/community/shareStory/${post.id}`}
             key={post.id}

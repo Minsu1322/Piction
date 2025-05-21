@@ -20,7 +20,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full py-4 px-6 flex justify-between items-center bg-blue-300 shadow-md">
+    <header className="w-full py-4 px-6 flex justify-between items-center bg-blue-400 shadow-md">
       {/* 로고 */}
       <Link href="/">
         <Image
@@ -33,7 +33,7 @@ export default function Header() {
       </Link>
 
       {/* 네비게이션 탭 */}
-      <nav className="flex items-center text-lg font-medium text-gray-800 ml-auto mr-8">
+      <nav className="flex items-center text-xl font-medium text-white ml-auto mr-8">
         <Link
           href="/community/category"
           className="px-4 py-2 transition cursor-pointer hover:text-purple-500"
@@ -44,13 +44,6 @@ export default function Header() {
 
       {/* 유저 정보 or 로그인 버튼 */}
       <div className="flex items-center">
-        <button
-          onClick={() => router.push("/story/new")}
-          className="px-4 py-2 mr-4 font-semibold text-gray-800 transition cursor-pointer hover:text-blue-500"
-        >
-          Start Story
-        </button>
-
         {user ? (
           <div className="relative">
             <button onClick={() => setIsDropdownOpen((prev) => !prev)}>

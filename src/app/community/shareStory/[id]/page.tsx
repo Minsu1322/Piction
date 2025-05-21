@@ -165,16 +165,19 @@ const DetailShareStory = () => {
         {/* 좌측 - 표지 이미지 */}
         <div className="md:w-1/2">
           <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-96">
-            <img
-              src={
-                shareStory.cover_image || "https://via.placeholder.com/500x700"
-              }
-              alt={`${shareStory.story_title} 표지`}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.currentTarget.src = "https://via.placeholder.com/500x700";
-              }}
-            />
+            {shareStory.cover_image ? (
+              <img
+                src={shareStory.cover_image}
+                alt={`${shareStory.story_title} 표지`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src="/StoryDefalut_Image.svg"
+                alt="기본 표지 이미지"
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
         </div>
 
