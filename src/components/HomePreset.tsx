@@ -57,7 +57,7 @@ export default function HomePreset() {
             transition={{ duration: 0.8 }}
             className="text-5xl mb-6 bg-clip-text text-white bg-black"
           >
-            당신의 선택으로 펼쳐지는 이야기를 만들어보세요
+            당신의 선택으로 펼쳐지는 이야기를 만들어보세요!
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
