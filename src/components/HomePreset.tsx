@@ -9,6 +9,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { presets } from "./Preset.tsx";
+import HomeHeader from "@/components/Header/HomeHeader";
 
 export default function HomePreset() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function HomePreset() {
 
   return (
     <div
-      className="w-full py-16"
+      className="w-full py-4"
       style={{
         backgroundImage: 'url("/main-image-large 1.svg")',
         backgroundSize: "cover",
@@ -32,15 +33,7 @@ export default function HomePreset() {
         height: "750px",
       }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: 'url("/main-image-large 1.svg")',
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "top",
-        }}
-      ></div>
+      <HomeHeader />
       <div
         className="absolute inset-x-0 bottom-0"
         style={{

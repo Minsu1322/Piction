@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useState } from "react";
 
-export default function Header() {
+export default function HomeHeader() {
   const { user, clearUser } = useAuthStore();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full py-4 px-6 flex justify-between items-center bg-blue-400 shadow-md">
+    <header className="w-full py-4 px-6 flex justify-between items-center bg-transparent mb-20">
       {/* 로고 */}
       <Link href="/">
         <Image
@@ -36,9 +36,28 @@ export default function Header() {
       <nav className="flex items-center text-xl font-medium text-white ml-auto mr-8">
         <Link
           href="/community/category"
-          className="px-4 py-2 transition cursor-pointer hover:text-purple-500"
+          className="group relative px-4 py-2 cursor-pointer transition-colors duration-300"
         >
-          커뮤니티
+          <span
+            className="
+        transition-all duration-300
+        group-hover:text-black
+        group-hover:scale-110
+        inline-block
+      "
+          >
+            커뮤니티
+          </span>
+          <span
+            className="
+        absolute left-0 bottom-1 w-full h-0.5
+        bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400
+        scale-x-0 group-hover:scale-x-100
+        transition-transform duration-300 origin-left
+        rounded-full
+        pointer-events-none
+      "
+          />
         </Link>
       </nav>
 

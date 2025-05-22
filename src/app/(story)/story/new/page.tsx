@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/storyStore";
-import { Nanum_Pen_Script } from "next/font/google";
-const nanumFont = Nanum_Pen_Script({ weight: "400", subsets: ["latin"] });
 
 export default function NewStoryPage() {
   const router = useRouter();
@@ -29,6 +27,19 @@ export default function NewStoryPage() {
   });
 
   const guidePanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "//cdn.jsdelivr.net/npm/font-kopubworld@1.0/batang.min.css";
+    document.head.appendChild(link);
+
+    return () => {
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -126,55 +137,31 @@ ${
 
   return (
     <div
-      className={`min-h-screen w-full bg-red-50 ${nanumFont.className}`}
+      className={`min-h-screen w-full bg-red-50`}
       style={{
         backgroundImage: 'url("/story_bg.svg")',
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        fontFamily: "KoPub Batang, serif",
+        fontWeight: 400,
       }}
     >
       {" "}
       {/* Decorative Elements */}
       <div className="container mx-auto px-4 py-16 relative z-10">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12">
-          <div className="text-center md:text-left mb-8 md:mb-0">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
-              새로운
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                이야기
-              </span>
-              의 시작
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600">
-              당신만의 세계를 만들고 모험을 시작하세요
-            </p>
-          </div>
-
-          {/* Hero Image Placeholder */}
-          <div className="w-48 h-48 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 border border-gray-200 flex items-center justify-center shadow-lg">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-24 w-24 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-              />
-            </svg>
-          </div>
+        <div className="flex flex-col items-center mb-12">
+          <h1 className="text-4xl font-hallym-700 text-gray-800 mb-4">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              새로운 이야기의 시작
+            </span>
+          </h1>
         </div>
 
         {/* Content Card */}
         <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
           {/* Progress Bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
 
           <div className="grid 2 gap-8 p-8">
             {/* Right Column - Custom Settings */}
@@ -182,7 +169,7 @@ ${
               <div className="space-y-8">
                 {/* World Setting */}
                 <div className="relative">
-                  <label className="block text-2xl font-semibold mb-3 text-gray-800 flex items-center">
+                  <label className="text-xl font-semibold mb-3 text-gray-800 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 mr-3 text-blue-600"
@@ -203,7 +190,7 @@ ${
                   {/* 작성이 어려우신가요? 버튼 */}
                   <button
                     onClick={() => setShowGuide(true)}
-                    className="absolute right-0 top-0 text-xl cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
+                    className="absolute right-0 top-0 text-sm cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +213,7 @@ ${
                     value={world}
                     onChange={(e) => setWorld(e.target.value)}
                     placeholder="예: 마법이 존재하는 중세 판타지 세계에서 용과 인간이 공존하는 왕국, 주인공은 17세 견습 마법사 등 자세한 설정을 입력해주세요."
-                    className="w-full p-4 text-lg border border-gray-200 rounded-lg h-40 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
+                    className="w-full p-4 text-base border border-gray-200 rounded-lg h-40 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
                   />
                 </div>
                 <div>
@@ -268,13 +255,13 @@ ${
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="예: 로맨스, 판타지, 중세, 무협, ..."
-                    className="w-full p-4 text-lg border border-gray-200 rounded-lg h-15 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
+                    className="w-full p-4 text-base border border-gray-200 rounded-lg h-15 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
                   />
                 </div>
 
                 {/* Story Length */}
                 <div>
-                  <label className="block text-xl font-semibold mb-3 text-gray-800 flex items-center">
+                  <label className="text-lg font-semibold mb-3 text-gray-800 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 mr-3 text-blue-600"
@@ -300,15 +287,15 @@ ${
                         min={10}
                         max={200}
                         step={10}
-                        className="w-full h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg appearance-none cursor-pointer"
+                        className="w-full h-1 bg-gradient-to-r from-blue-300 to-purple-400 rounded-lg appearance-none cursor-pointer"
                       />
-                      <span className="text-gray-800 text-xl font-medium min-w-16 text-center bg-white rounded-lg py-1 px-3 border border-gray-200">
+                      <span className="text-gray-800 text-s font-medium min-w-16 text-center bg-white rounded-lg py-1 px-3 border border-gray-200">
                         {length}
                       </span>
                     </div>
-                    <div className="flex justify-between text-lg text-gray-600 mt-3 px-1">
+                    <div className="flex justify-between text-sm text-gray-600 mt-3 px-1">
                       <span>짧은 이야기</span>
-                      <span>긴 모험</span>
+                      <span>긴 이야기</span>
                     </div>
                   </div>
                 </div>
@@ -319,11 +306,11 @@ ${
           {/* Start Button Section */}
           <div className="px-8 pb-8">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg blur opacity-50"></div>
+              <div className="absolute inset-0 rounded-lg blur opacity-50"></div>
               <button
                 onClick={handleStartStory}
                 disabled={isLoading}
-                className="relative w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-xl font-bold rounded-lg shadow-lg transition transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center"
+                className="relative w-full py-4 bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-600 hover:to-purple-600 text-white text-base font-bold rounded-lg shadow-lg transition transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center"
               >
                 {isLoading ? (
                   <>
@@ -371,24 +358,11 @@ ${
                         d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    모험 시작하기
+                    이야기 시작하기
                   </>
                 )}
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Quote Footer */}
-        <div className="mt-12 text-center">
-          <div className="inline-block bg-white px-8 py-4 rounded-full border border-gray-200 shadow-md">
-            <p className="text-gray-800 text-lg italic">
-              모든 위대한 이야기는
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-semibold">
-                당신의 선택
-              </span>
-              으로 완성됩니다
-            </p>
           </div>
         </div>
       </div>
