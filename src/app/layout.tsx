@@ -4,7 +4,7 @@ import AuthProvider from "@/components/AuthProvider";
 import HeaderSelector from "@/components/Header/HeaderSelector";
 
 export const metadata: Metadata = {
-  title: "Piction - 선택이 만드는 무한한 이야기",
+  title: "Piction",
   description: "당신만의 스토리를 만들어보세요",
   icons: {
     icon: "/favicon-32x32.png",
