@@ -302,7 +302,6 @@ export default function StoryGenerator() {
         <div className="story-content mb-6">
           <p className="whitespace-pre-wrap text-lg">{story}</p>
         </div>
-        {/* {loading && <p className="text-xl">스토리 생성 중...</p>} */}
         {loading && (
           <>
             {!story ? (
