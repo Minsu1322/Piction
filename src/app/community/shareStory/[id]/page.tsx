@@ -152,7 +152,7 @@ const DetailShareStory = () => {
     return <p className="text-center">해당 글을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-3/4 mx-auto p-6">
       {/* 상단 네비게이션 */}
       <div className="flex justify-between items-center mb-6">
         <button
@@ -175,7 +175,7 @@ const DetailShareStory = () => {
       <div className="flex flex-col md:flex-row">
         {/* 좌측 - 표지 이미지 */}
         <div className="md:w-1/2">
-          <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-150 relative">
+          <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-180 relative">
             {shareStory.cover_image ? (
               <img
                 src={shareStory.cover_image}
