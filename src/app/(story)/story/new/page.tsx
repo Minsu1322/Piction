@@ -9,9 +9,8 @@ export default function NewStoryPage() {
   const { setWorldSetting, setStoryLength, setGenreSetting } = useStoryStore();
   const [world, setWorld] = useState("");
   const [length, setLength] = useState(50);
-  const [isLoading, setIsLoading] = useState(false);
   const [localGenres, setLocalGenres] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState("");
+  const [storyMakeStep, setStoryMakeStep] = useState<number>(1);
 
   //가이드패널
   const [showGuide, setShowGuide] = useState(false);
@@ -110,7 +109,6 @@ ${
       return;
     }
 
-    setIsLoading(true);
     setWorldSetting(world);
     setStoryLength(length);
     setGenreSetting(localGenres);
@@ -119,25 +117,9 @@ ${
     }, 600);
   };
 
-  //장르구분함수
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      const trimmedValue = inputValue.trim();
-      if (trimmedValue && !localGenres.includes(trimmedValue)) {
-        setLocalGenres((prev) => [...prev, trimmedValue]);
-      }
-      setInputValue("");
-    }
-  };
-
-  const removeGenre = (genre: string) => {
-    setLocalGenres((prev) => prev.filter((g) => g !== genre));
-  };
-
   return (
     <div
-      className={`min-h-screen w-full bg-red-50`}
+      className={`min-h-screen w-full`}
       style={{
         backgroundImage: 'url("/story_bg.svg")',
         backgroundSize: "cover",
@@ -147,12 +129,15 @@ ${
         fontWeight: 400,
       }}
     >
-      {" "}
       {/* Decorative Elements */}
       <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="flex mb-4 justify-center text-[#A5ABB4] font-semibold">
+          {storyMakeStep}/3
+        </div>
+
         {/* Header Section */}
-        <div className="flex flex-col items-center mb-12">
-          <h1 className="text-4xl font-hallym-700 text-gray-800 mb-4">
+        <div className="flex flex-col items-center mb-6">
+          <h1 className="text-4xl font-hallym-700 text-gray-800">
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               새로운 이야기의 시작
             </span>
@@ -160,208 +145,200 @@ ${
         </div>
 
         {/* Content Card */}
-        <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-          {/* Progress Bar */}
-
+        <div className="rounded-2xl overflow-hidden">
           <div className="grid 2 gap-8 p-8">
-            {/* Right Column - Custom Settings */}
             <div className="order-1 md:order-2">
               <div className="space-y-8">
-                {/* World Setting */}
-                <div className="relative">
-                  <label className="text-xl font-semibold mb-3 text-gray-800 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mr-3 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    세계관 설정
-                  </label>
+                {/* 스토리 단계별 실행(storyMakeStep으로 렌더링 구분분) */}
 
-                  {/* 작성이 어려우신가요? 버튼 */}
-                  <button
-                    onClick={() => setShowGuide(true)}
-                    className="absolute right-0 top-0 text-sm cursor-pointer text-blue-600 hover:text-blue-800 flex items-center transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    작성이 어려우신가요?
-                  </button>
+                {storyMakeStep === 1 && (
+                  <div>
+                    <label className="flex text-4xl justify-center font-semibold mb-5 text-gray-800 items-center">
+                      장르
+                    </label>
 
-                  <textarea
-                    value={world}
-                    onChange={(e) => setWorld(e.target.value)}
-                    placeholder="예: 마법이 존재하는 중세 판타지 세계에서 용과 인간이 공존하는 왕국, 주인공은 17세 견습 마법사 등 자세한 설정을 입력해주세요."
-                    className="w-full p-4 text-base border border-gray-200 rounded-lg h-40 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xl font-semibold mb-3 text-gray-800 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mr-3 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    장르 설정
-                  </label>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {localGenres.map((genre) => (
-                      <div
-                        key={genre}
-                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center"
+                    <div className="grid grid-cols-4 gap-6 my-20">
+                      {[
+                        "로맨스",
+                        "호러",
+                        "스릴러",
+                        "판타지",
+                        "SF",
+                        "코미디",
+                        "중세",
+                        "무협",
+                      ].map((genre) => {
+                        const isSelected = localGenres.includes(genre);
+                        return (
+                          <button
+                            key={genre}
+                            onClick={() => {
+                              if (isSelected) {
+                                setLocalGenres(
+                                  localGenres.filter((g) => g !== genre)
+                                );
+                              } else {
+                                setLocalGenres([...localGenres, genre]);
+                              }
+                            }}
+                            className={`px-8 py-8 rounded-lg text-xl font-medium transition-all duration-200 cursor-pointer ${
+                              isSelected
+                                ? " text-black border-2 border-[#385DD9] bg-[#EDF2FF]"
+                                : " bg-white hover:bg-gray-200"
+                            }`}
+                          >
+                            {genre}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => setStoryMakeStep((prev) => prev + 1)}
+                        disabled={localGenres.length === 0}
+                        className={`px-12 py-3 rounded-2xl text-lg text-white font-semibold transition cursor-pointer ${
+                          localGenres.length === 0
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-[#4F78FF] text-white hover:bg-blue-700"
+                        }`}
                       >
-                        {genre}
-                        <button
-                          className="ml-2 text-red-500"
-                          onClick={() => removeGenre(genre)}
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  <input
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="예: 로맨스, 판타지, 중세, 무협, ..."
-                    className="w-full p-4 text-base border border-gray-200 rounded-lg h-15 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
-                  />
-                </div>
-
-                {/* Story Length */}
-                <div>
-                  <label className="text-lg font-semibold mb-3 text-gray-800 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mr-3 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    스토리 길이
-                  </label>
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 shadow-sm">
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="range"
-                        value={length}
-                        onChange={(e) => setLength(Number(e.target.value))}
-                        min={10}
-                        max={200}
-                        step={10}
-                        className="w-full h-1 bg-gradient-to-r from-blue-300 to-purple-400 rounded-lg appearance-none cursor-pointer"
-                      />
-                      <span className="text-gray-800 text-s font-medium min-w-16 text-center bg-white rounded-lg py-1 px-3 border border-gray-200">
-                        {length}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm text-gray-600 mt-3 px-1">
-                      <span>짧은 이야기</span>
-                      <span>긴 이야기</span>
+                        다음
+                      </button>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Start Button Section */}
-          <div className="px-8 pb-8">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-lg blur opacity-50"></div>
-              <button
-                onClick={handleStartStory}
-                disabled={isLoading}
-                className="relative w-full py-4 bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-600 hover:to-purple-600 text-white text-base font-bold rounded-lg shadow-lg transition transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center"
-              >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-6 w-6 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    이야기 세계 구축 중...
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    이야기 시작하기
-                  </>
                 )}
-              </button>
+
+                {storyMakeStep === 2 && (
+                  <div className="relative">
+                    <div className="flex justify-center text-lg text-gray-400 font-semibold mt-10 mb-10">
+                      {localGenres.join(" · ")}
+                    </div>
+
+                    <label className="text-4xl justify-center text-gray-800 flex items-center">
+                      세계관
+                    </label>
+
+                    {/* 가이드 버튼 */}
+
+                    {/* 텍스트 입력 */}
+                    <textarea
+                      value={world}
+                      onChange={(e) => setWorld(e.target.value)}
+                      placeholder="예: 마법이 존재하는 중세 판타지 세계에서 용과 인간이 공존하는 왕국, 주인공은 17세 견습 마법사 등 자세한 설정을 입력해주세요."
+                      className="w-full mt-12 p-4 text-base shadow-xl resize-none border border-gray-200 rounded-lg h-80 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none bg-gray-50 text-gray-800 placeholder-gray-400"
+                    />
+
+                    <div className="flex justify-center my-12">
+                      <button
+                        onClick={() => setShowGuide(true)}
+                        className="right-0 top-0 text-lg cursor-pointer text-[#868D98] hover:text-blue-700 hover:font-bold flex items-center transition"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        작성이 어려우신가요?
+                      </button>
+                    </div>
+
+                    {/* 버튼 영역 */}
+                    <div className="flex justify-center gap-8 mt-6">
+                      <button
+                        onClick={() => setStoryMakeStep((prev) => prev - 1)}
+                        className="px-12 py-3 rounded-xl bg-[#A5ABB4] text-white hover:bg-gray-500 font-semibold transition text-base cursor-pointer"
+                      >
+                        이전
+                      </button>
+                      <button
+                        onClick={() => setStoryMakeStep((prev) => prev + 1)}
+                        disabled={world.trim().length === 0}
+                        className={`px-12 py-3 rounded-lg font-semibold transition
+          ${
+            world.trim().length === 0
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-[#4F78FF] text-white hover:bg-blue-700 cursor-pointer"
+          }`}
+                      >
+                        다음
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {storyMakeStep === 3 && (
+                  <div>
+                    <div className="flex justify-center text-sm text-gray-400 font-semibold mt-10">
+                      {localGenres.join(" · ")}
+                    </div>
+
+                    <div className="flex justify-center mb-10">
+                      <div className="text-lg text-gray-400 font-semibold line-clamp-1 max-w-3/5">
+                        {world}
+                      </div>
+                    </div>
+
+                    <label className="flex text-4xl justify-center mb-10 text-gray-800 items-center">
+                      스토리 길이
+                    </label>
+
+                    <div className="bg-gray-50 rounded-lg p-20 px-24 border border-gray-200 shadow-sm">
+                      <div className="relative">
+                        <div
+                          className="absolute font-semibold -top-10 bg-[#EDF2FF] text-[#385DD9] text-sm px-5 py-1 rounded transform -translate-x-1/2 pointer-events-none"
+                          style={{
+                            left: `${((length - 9) / (200 - 10)) * 100}%`,
+                          }}
+                        >
+                          {length}
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                        </div>
+
+                        <input
+                          type="range"
+                          value={length}
+                          onChange={(e) => setLength(Number(e.target.value))}
+                          min={10}
+                          max={200}
+                          step={10}
+                          className="w-full h-2 bg-gradient-to-r from-blue-300 to-purple-400 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="flex justify-between text-sm text-gray-600 mt-3 px-1">
+                        <span>짧은 이야기</span>
+                        <span>긴 이야기</span>
+                      </div>
+                    </div>
+
+                    {/* 버튼 영역 */}
+                    <div className="flex justify-center gap-6 mt-12">
+                      <button
+                        onClick={() => setStoryMakeStep((prev) => prev - 1)}
+                        className="px-12 py-3 rounded-xl bg-[#A5ABB4] text-white hover:bg-gray-500 font-semibold transition text-base cursor-pointer"
+                      >
+                        이전
+                      </button>
+                      <button
+                        onClick={handleStartStory}
+                        className="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold transition"
+                      >
+                        모험 시작하기
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
