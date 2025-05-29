@@ -9,6 +9,12 @@ import { useEffect, useState } from "react";
 import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 
 export default function CommunityPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const POSTS_PER_PAGE = 10;
+  const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
+
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState<
@@ -17,19 +23,30 @@ export default function CommunityPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("/api/community");
-        const data = await response.json();
-        setPosts(data);
+        const res = await fetch(
+          `/api/community?page=${currentPage}&limit=${POSTS_PER_PAGE}`
+        );
+        const data = await res.json();
+
+        if (Array.isArray(data.posts)) {
+          setPosts(data.posts);
+          setTotalCount(data.totalCount || 0);
+        } else {
+          console.error("data.posts가 배열이 아닙니다:", data.posts);
+          setPosts([]); // fallback
+        }
       } catch (error) {
-        console.error("Error fetching community posts:", error);
+        console.error("fetchPosts 에러:", error);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [currentPage]);
 
   const sortedPosts = [...posts].sort((a, b) => {
     if (sortOption === "latest") {
@@ -53,9 +70,7 @@ export default function CommunityPage() {
           <button
             onClick={() => setSortOption("latest")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
-              sortOption === "latest"
-                ? "font-bold"
-                : "bg-gray-100 text-gray-700"
+              sortOption === "latest" ? "font-bold" : " text-gray-700"
             }`}
           >
             • 최신순
@@ -63,9 +78,7 @@ export default function CommunityPage() {
           <button
             onClick={() => setSortOption("recommend")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
-              sortOption === "recommend"
-                ? "font-bold"
-                : "bg-gray-100 text-gray-700"
+              sortOption === "recommend" ? "font-bold" : "0 text-gray-700"
             }`}
           >
             • 추천순
@@ -73,9 +86,7 @@ export default function CommunityPage() {
           <button
             onClick={() => setSortOption("comment")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
-              sortOption === "comment"
-                ? "font-bold"
-                : "bg-gray-100 text-gray-700"
+              sortOption === "comment" ? "font-bold" : " text-gray-700"
             }`}
           >
             • 댓글순
@@ -138,6 +149,19 @@ export default function CommunityPage() {
           ))}
         </div>
       )}
+      <div className="flex justify-center mt-6 gap-2">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`px-2 cursor-pointer py-1 rounded-md text-sm ${
+              currentPage === page ? "bg-gray-200 text-black" : "text-gray-700"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

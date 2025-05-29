@@ -27,4 +27,5 @@ export interface shareStory {
   cover_image: string;
   likes_count: number;
   story_title: string;
+  story_time: number;
 }

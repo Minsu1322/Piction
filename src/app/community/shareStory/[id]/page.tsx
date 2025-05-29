@@ -4,6 +4,7 @@ import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { shareStory } from "@/components/types/types";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthStore } from "@/store/authStore";
+import { useStoryStore } from "@/store/storyStore";
 import { formatDate } from "@/utils/formData";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -19,6 +20,17 @@ const DetailShareStory = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
+
+  //모험시작
+  const { setWorldSetting, setStoryLength, setGenreSetting } = useStoryStore();
+
+  const handlePresetClick = () => {
+    if (!shareStory?.story_content) return;
+    setWorldSetting(shareStory.story_content);
+    setStoryLength(shareStory.story_time);
+    setGenreSetting([shareStory.genre]);
+    router.push("/story/play");
+  };
 
   useEffect(() => {
     const fetchShareStory = async () => {
@@ -140,7 +152,7 @@ const DetailShareStory = () => {
     return <p className="text-center">해당 글을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       {/* 상단 네비게이션 */}
       <div className="flex justify-between items-center mb-6">
         <button
@@ -160,11 +172,10 @@ const DetailShareStory = () => {
           </button>
         )}
       </div>
-
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row">
         {/* 좌측 - 표지 이미지 */}
         <div className="md:w-1/2">
-          <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-96">
+          <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-150 relative">
             {shareStory.cover_image ? (
               <img
                 src={shareStory.cover_image}
@@ -178,6 +189,13 @@ const DetailShareStory = () => {
                 className="w-full h-full object-cover"
               />
             )}
+
+            {/* 하단에 오버레이된 제목 */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+              <h1 className="text-xl font-bold text-white">
+                {shareStory.story_title}
+              </h1>
+            </div>
           </div>
         </div>
 
@@ -191,7 +209,7 @@ const DetailShareStory = () => {
                   shareStory.genre.split(",").map((genre, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      className="px-3 py-1 bg-[#EEEFF1] text-blue-800 rounded-full text-sm"
                     >
                       {genre}
                     </span>
@@ -210,15 +228,10 @@ const DetailShareStory = () => {
                   }`}
                 >
                   <FiThumbsUp className={hasLiked ? "fill-current" : ""} />
-                  <span>추천수: {likeCount}</span>
+                  <span>{likeCount}</span>
                 </button>
               </div>
             </div>
-
-            {/* 제목 */}
-            <h1 className="text-2xl font-bold mb-4">
-              {shareStory.story_title}
-            </h1>
 
             {/* 작성일 */}
             <div className="text-sm text-gray-500 mb-6">
@@ -226,10 +239,25 @@ const DetailShareStory = () => {
             </div>
 
             {/* 내용 영역 (스크롤) */}
-            <div className="prose max-w-none overflow-y-auto h-64 border border-gray-200 rounded-md p-4 bg-gray-50">
+            <div className="prose max-w-none overflow-y-auto h-64 rounded-md p-4">
               <p className="whitespace-pre-wrap">{shareStory.story_content}</p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="mt-20 relative flex items-center justify-center">
+        {/* 그라데이션 실선 */}
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+        </div>
+
+        {/* 가운데 텍스트 */}
+        <div className="relative bg-white px-4">
+          <span className="text-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            <button className="cursor-pointer" onClick={handlePresetClick}>
+              모험시작하기
+            </button>
+          </span>
         </div>
       </div>
     </div>

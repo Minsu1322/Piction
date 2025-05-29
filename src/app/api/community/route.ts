@@ -1,10 +1,17 @@
 import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1", 10); // 기본값: 1
+  const limit = parseInt(searchParams.get("limit") || "10", 10); // 기본값: 10
+  const offset = (page - 1) * limit;
+
   const { data: posts, error: postsError } = await supabase
     .from("community")
-    .select("id, created_at, content, title");
+    .select("id, created_at, content, title")
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1); // 페이지 범위
 
   if (postsError) {
     return NextResponse.json({ error: postsError.message }, { status: 500 });
@@ -39,7 +46,14 @@ export async function GET() {
     })
   );
 
-  return NextResponse.json(postsWithCommentAndLikesCount, { status: 200 });
+  const { count: totalCount } = await supabase
+    .from("community")
+    .select("id", { count: "exact", head: true });
+
+  return NextResponse.json(
+    { posts: postsWithCommentAndLikesCount, totalCount },
+    { status: 200 }
+  );
 }
 
 export async function POST(req: Request) {

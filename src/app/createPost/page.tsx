@@ -39,7 +39,7 @@ export default function CreatePostPage() {
       alert("글 작성 중 오류가 발생했습니다.");
       console.error(error);
     } else {
-      router.push("/community");
+      router.push("/community/category");
     }
   };
 

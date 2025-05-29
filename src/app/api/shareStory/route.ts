@@ -1,12 +1,19 @@
 import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1", 10); // 기본값: 1
+  const limit = parseInt(searchParams.get("limit") || "10", 10); // 기본값: 10
+  const offset = (page - 1) * limit;
+
   const { data: posts, error: postsError } = await supabase
     .from("shareStory")
     .select(
       "id, created_at, user_id, story_content, genre, cover_image, story_title"
-    );
+    )
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
 
   if (postsError) {
     return NextResponse.json({ error: postsError.message }, { status: 500 });
@@ -30,7 +37,14 @@ export async function GET() {
     })
   );
 
-  return NextResponse.json(storyLikesCount, { status: 200 });
+  const { count: totalCount } = await supabase
+    .from("shareStory")
+    .select("id", { count: "exact", head: true });
+
+  return NextResponse.json(
+    { posts: storyLikesCount, totalCount },
+    { status: 200 }
+  );
 }
 
 export async function POST(req: Request) {

@@ -1,11 +1,18 @@
 "use client";
 
 import CommunityHeader from "@/components/community/Header";
+import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { shareStory } from "@/components/types/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function ShareStoryPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const POSTS_PER_PAGE = 8;
+  const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
+  const [loading, setLoading] = useState(true);
+
   const [posts, setPosts] = useState<shareStory[]>([]);
   const [sortOption, setSortOption] = useState<"latest" | "recommend">(
     "latest"
@@ -16,17 +23,30 @@ export default function ShareStoryPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("/api/shareStory");
+        const response = await fetch(
+          `/api/shareStory?page=${currentPage}&limit=${POSTS_PER_PAGE}`
+        );
         const data = await response.json();
-        setPosts(data);
+
+        if (Array.isArray(data.posts)) {
+          setPosts(data.posts);
+          setTotalCount(data.totalCount || 0);
+        } else {
+          console.error("data.posts가 배열이 아닙니다:", data.posts);
+          setPosts([]); // fallback
+        }
       } catch (error) {
-        console.error("Error fetching community posts:", error);
+        console.error("fetchPosts 에러:", error);
+        setPosts([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [currentPage]);
 
   const filteredAndSortedPosts = [...posts]
     .filter((post) => {
@@ -43,6 +63,10 @@ export default function ShareStoryPage() {
       return 0;
     });
   const genres = ["전체", "로맨스", "판타지", "스릴러", "액션", "힐링"];
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -138,6 +162,22 @@ export default function ShareStoryPage() {
                 </span>
               </div>
             </Link>
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-6 gap-2">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`px-2 cursor-pointer py-1 rounded-md text-sm ${
+                currentPage === page
+                  ? "bg-gray-200 text-black"
+                  : "text-gray-700"
+              }`}
+            >
+              {page}
+            </button>
           ))}
         </div>
       </div>

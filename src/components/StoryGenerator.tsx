@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
 import OpenAI from "openai";
 import ChoiceButtons from "@/components/ChoiceButtons";
-import StoryLoading from "./LoadingComponents/StoryLoading";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -23,11 +22,19 @@ export default function StoryGenerator() {
   const [choices, setChoices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  // const [initialized, setInitialized] = useState(false);
   const [storyEnded, setStoryEnded] = useState<"success" | "failure" | null>(
     null
   );
   const initialRenderRef = useRef(true);
+
+  //스크롤 관련(스토리생성시, 아래로 스크롤)
+  const endOfStoryRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (endOfStoryRef.current) {
+      endOfStoryRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [story]);
 
   useEffect(() => {
     if (worldSetting && storyLength && initialRenderRef.current) {
@@ -43,7 +50,7 @@ export default function StoryGenerator() {
     const promptData = `세계관: ${worldSetting}\n분량 수: ${storyLength}\n장르: ${GenreSetting}
   
   지시사항:
-  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 2~3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
+  1. 스토리를 완전한 문장으로 작성하고, 마지막에 반드시 3개의 선택지를 제공하고, 웹소설 스타일을 반영하라.
   2. 스토리를 현대 웹소설 스타일로 작성하라. 등장인물 간 대화는 큰따옴표(")를 사용하여 표현하라.
   3. 각 선택지는 별도의 줄에 숫자와 함께 나열해라. 예시: \n1. 첫 번째 선택지\n2. 두 번째 선택지
   4. 선택지 중 하나는 위험하거나 도전적인 선택이 되도록 하라.
@@ -302,15 +309,6 @@ export default function StoryGenerator() {
         <div className="story-content mb-6">
           <p className="whitespace-pre-wrap text-lg">{story}</p>
         </div>
-        {loading && (
-          <>
-            {!story ? (
-              <StoryLoading />
-            ) : (
-              <p className="text-lg">스토리 생성 중...</p>
-            )}
-          </>
-        )}
 
         {storyEnded === "failure" && (
           <div className="story-failed mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
@@ -343,19 +341,29 @@ export default function StoryGenerator() {
       </div>
 
       {/* 선택지 영역 (하단단) */}
-      <div className="mt-5 p-6 bg-[#D6E0FF] rounded-2xl border-[#92ACFF] border-2">
-        {choices.length > 0 ? (
-          <ChoiceButtons choices={choices} onSelect={generateStory} />
-        ) : (
-          <div className="flex-grow flex items-center justify-center">
-            <p className="text-gray-500 italic">
-              {storyEnded
-                ? "이야기가 종료되었습니다."
-                : "선택지를 기다리는 중..."}
-            </p>
-          </div>
-        )}
-      </div>
+      {loading ? (
+        <div className="flex justify-center gap-2 mt-4">
+          <div className="w-5 h-5 border-4 border-blue-400 border-t-transparent rounded-full animate-spin" />
+          <span className="text-gray-700">로딩중...</span>
+        </div>
+      ) : (
+        <div
+          ref={endOfStoryRef}
+          className="mt-5 p-6 bg-[#D6E0FF] rounded-2xl border-[#92ACFF] border-2"
+        >
+          {choices.length > 0 ? (
+            <ChoiceButtons choices={choices} onSelect={generateStory} />
+          ) : (
+            <div className="flex-grow flex items-center justify-center">
+              <p className="text-gray-500 italic">
+                {storyEnded
+                  ? "이야기가 종료되었습니다."
+                  : "선택지를 기다리는 중..."}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
