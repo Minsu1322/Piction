@@ -37,7 +37,7 @@ export default function CommunityPage() {
   const POSTS_PER_PAGE = 10;
 
   // useQuery로 데이터 fetching
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["posts", currentPage, POSTS_PER_PAGE],
     queryFn: () => fetchPosts(currentPage, POSTS_PER_PAGE),
     staleTime: 5 * 60 * 1000,
