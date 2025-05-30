@@ -5,7 +5,7 @@ import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { Post } from "@/components/types/types";
 import { formatDate } from "@/utils/formData";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 
