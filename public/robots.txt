@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://piction.site/
+Host: https://piction.vercel.app/
 
 # Sitemaps
-Sitemap: https://piction.site/sitemap.xml
+Sitemap: https://piction.vercel.app/sitemap.xml
