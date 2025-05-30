@@ -18,6 +18,10 @@ export const metadata: Metadata = {
     "AI소설",
   ],
   metadataBase: new URL("https://www.piction.site"),
+  verification: {
+    google: "fs13U9M2qujjIHTs0bt5uP5nhdLx91m1zgn_8HC7ErA",
+  },
+
   openGraph: {
     title: "Piction",
     description: "당신만의 스토리를 만들어보세요",
