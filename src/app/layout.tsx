@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import HeaderSelector from "@/components/Header/HeaderSelector";
+import QueryProvider from "./Provider";
 
 export const metadata: Metadata = {
   title: "Piction",
@@ -51,10 +52,12 @@ export default function RootLayout({
         <div className="relative h-screen w-full flex flex-col">
           {/* 메인 콘텐츠 */}
           <div className={`relative z-10 flex flex-col h-full`}>
-            <AuthProvider>
-              <HeaderSelector />
-              <main>{children}</main>
-            </AuthProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <HeaderSelector />
+                <main>{children}</main>
+              </AuthProvider>
+            </QueryProvider>
           </div>
         </div>
       </body>

@@ -120,7 +120,7 @@ export default function ShareStoryPage() {
                 href="/createShareStory"
                 className="px-6 py-2 rounded-xl bg-[#4F78FF] text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
               >
-                <span>글쓰기1</span>
+                <span>글쓰기</span>
               </Link>
             </div>
           </div>

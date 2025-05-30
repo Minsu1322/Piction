@@ -5,61 +5,78 @@ import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { Post } from "@/components/types/types";
 import { formatDate } from "@/utils/formData";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchPosts = async (page: number, limit: number) => {
+  const res = await fetch(`/api/community?page=${page}&limit=${limit}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data = await res.json();
+
+  if (!Array.isArray(data.posts)) {
+    throw new Error("Invalid posts data format");
+  }
+
+  return {
+    posts: data.posts as Post[],
+    totalCount: data.totalCount || 0,
+  };
+};
 
 export default function CommunityPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-
-  const POSTS_PER_PAGE = 10;
-  const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
-
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState<
     "latest" | "recommend" | "comment"
   >("latest");
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/api/community?page=${currentPage}&limit=${POSTS_PER_PAGE}`
-        );
-        const data = await res.json();
+  const POSTS_PER_PAGE = 10;
 
-        if (Array.isArray(data.posts)) {
-          setPosts(data.posts);
-          setTotalCount(data.totalCount || 0);
-        } else {
-          console.error("data.posts가 배열이 아닙니다:", data.posts);
-          setPosts([]); // fallback
-        }
-      } catch (error) {
-        console.error("fetchPosts 에러:", error);
-        setPosts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [currentPage]);
-
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (sortOption === "latest") {
-      return (
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    } else if (sortOption === "recommend") {
-      return b.likes_count - a.likes_count;
-    } else if (sortOption === "comment") {
-      return b.comment_count - a.comment_count;
-    }
-    return 0;
+  // useQuery로 데이터 fetching
+  const { data, isLoading, error, isError } = useQuery({
+    queryKey: ["posts", currentPage, POSTS_PER_PAGE],
+    queryFn: () => fetchPosts(currentPage, POSTS_PER_PAGE),
+    staleTime: 5 * 60 * 1000,
   });
+
+  const posts = data?.posts || [];
+  const totalCount = data?.totalCount || 0;
+  const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
+
+  //게시글 메모
+  const sortedPosts = useMemo(() => {
+    return [...posts].sort((a, b) => {
+      if (sortOption === "latest") {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      } else if (sortOption === "recommend") {
+        return b.likes_count - a.likes_count;
+      } else if (sortOption === "comment") {
+        return b.comment_count - a.comment_count;
+      }
+      return 0;
+    });
+  }, [posts, sortOption]);
+
+  // 에러 처리
+  if (isError) {
+    return (
+      <div className="max-w-350 mx-auto p-6 rounded-lg">
+        <CommunityHeader />
+        <div className="text-center py-16 bg-red-50 rounded-lg">
+          <p className="text-red-500 text-lg">
+            게시글을 불러오는 중 오류가 발생했습니다.
+          </p>
+          <p className="mt-2 text-red-400">잠시 후 다시 시도해주세요.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-350 mx-auto p-6 rounded-lg">
@@ -102,7 +119,7 @@ export default function CommunityPage() {
         </div>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <Spinner />
       ) : posts.length === 0 ? (
         <div className="text-center py-16 bg-gray-50 rounded-lg">
