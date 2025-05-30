@@ -235,7 +235,7 @@ ${
                         className="right-0 top-0 text-lg cursor-pointer text-[#868D98] hover:text-blue-700 hover:font-bold flex items-center transition"
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns="https://www.w3.org/2000/svg"
                           className="h-5 w-5 mr-1"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -359,7 +359,7 @@ ${
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold flex items-center">
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                     className="h-6 w-6 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -379,7 +379,7 @@ ${
                   className="text-white hover:text-gray-200 transition p-1 rounded-full hover:bg-white/20"
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                     className="h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -438,7 +438,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -482,7 +482,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -526,7 +526,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -571,7 +571,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -616,7 +616,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -666,7 +666,7 @@ ${
                       </select>
 
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -707,7 +707,7 @@ ${
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none pl-10"
                       />
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns="https://www.w3.org/2000/svg"
                         className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
