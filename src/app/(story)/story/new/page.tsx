@@ -28,19 +28,6 @@ export default function NewStoryPage() {
   const guidePanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "//cdn.jsdelivr.net/npm/font-kopubworld@1.0/batang.min.css";
-    document.head.appendChild(link);
-
-    return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     function handleClickOutside(event: any) {
       if (
         guidePanelRef.current &&
@@ -125,7 +112,7 @@ ${
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        fontFamily: "KoPub Batang, serif",
+        fontFamily: "serif",
         fontWeight: 400,
       }}
     >

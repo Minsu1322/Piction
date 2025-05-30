@@ -2,27 +2,10 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect } from "react";
 
 export default function FeatureSection() {
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "//cdn.jsdelivr.net/npm/font-kopubworld@1.0/batang.min.css";
-    document.head.appendChild(link);
-
-    return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
-      }
-    };
-  }, []);
-
   return (
-    <section
-      className="py-20 relative"
-      style={{ fontFamily: "KoPub Batang, serif" }}
-    >
+    <section className="py-20 relative " style={{ fontFamily: "serif" }}>
       <div className="max-w-screen-lg mx-auto px-8">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
