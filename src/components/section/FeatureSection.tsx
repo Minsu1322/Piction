@@ -210,22 +210,23 @@ export default function FeatureSection() {
 
       {/* === 배경 이미지 추가 === */}
       <div className="absolute left-0 right-0 bottom-0 w-full h-[550px] pointer-events-none z-0 overflow-hidden">
-        <img
-          src="/main-image-back.svg"
+        <Image
+          src="/main-image-back.jpg"
           alt="메인 배경"
+          width={1920}
+          height={550}
           className="
-      w-full
-      h-full
-      object-cover
-      opacity-100
-      mask-gradient-blur
-      transition-all
-      duration-500
-      scale-115
-    "
+     w-full
+     h-full
+     object-cover
+     opacity-100
+     mask-gradient-blur
+     transition-all
+     duration-500
+     scale-115
+   "
           draggable={false}
           style={{
-            // mask-image 효과를 위한 fallback
             maskImage: "linear-gradient(to top, black 60%, transparent 100%)",
             WebkitMaskImage:
               "linear-gradient(to top, black 60%, transparent 100%)",

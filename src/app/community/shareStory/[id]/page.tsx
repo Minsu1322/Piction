@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuthStore } from "@/store/authStore";
 import { useStoryStore } from "@/store/storyStore";
 import { formatDate } from "@/utils/formData";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FiArrowLeft, FiThumbsUp, FiTrash2 } from "react-icons/fi";
@@ -177,15 +178,19 @@ const DetailShareStory = () => {
         <div className="md:w-1/2">
           <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg h-180 relative">
             {shareStory.cover_image ? (
-              <img
+              <Image
                 src={shareStory.cover_image}
                 alt={`${shareStory.story_title} 표지`}
+                width={400}
+                height={600}
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img
+              <Image
                 src="/StoryDefalut_Image.svg"
                 alt="기본 표지 이미지"
+                width={400}
+                height={600}
                 className="w-full h-full object-cover"
               />
             )}

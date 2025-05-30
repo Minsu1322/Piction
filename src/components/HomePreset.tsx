@@ -26,7 +26,7 @@ export default function HomePreset() {
     <div
       className="w-full py-4"
       style={{
-        backgroundImage: 'url("/main-image-large 1.svg")',
+        backgroundImage: 'url("/main-image-large 1.jpg")',
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",

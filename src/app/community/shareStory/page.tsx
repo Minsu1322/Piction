@@ -3,6 +3,7 @@
 import CommunityHeader from "@/components/community/Header";
 import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { shareStory } from "@/components/types/types";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -119,7 +120,7 @@ export default function ShareStoryPage() {
                 href="/createShareStory"
                 className="px-6 py-2 rounded-xl bg-[#4F78FF] text-white text-sm font-medium flex items-center gap-2 hover:shadow-md transition-shadow"
               >
-                <span>글쓰기</span>
+                <span>글쓰기1</span>
               </Link>
             </div>
           </div>
@@ -135,9 +136,11 @@ export default function ShareStoryPage() {
             >
               {/* 표지 이미지 */}
               <div className="h-75 bg-gray-200">
-                <img
+                <Image
                   src={post.cover_image || "/StoryDefalut_Image.svg"}
                   alt="표지 이미지"
+                  width={300}
+                  height={300}
                   className="w-full h-full object-cover"
                 />
               </div>

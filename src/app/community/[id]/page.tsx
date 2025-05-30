@@ -318,7 +318,7 @@ export default function PostDetail() {
                 />
                 <button
                   onClick={handleCommentSubmit}
-                  className="w-28 flex items-center justify-center bg-gray-500 text-white rounded-xl hover:bg-gray-800 transition-colors"
+                  className="w-28 cursor-pointer flex items-center justify-center bg-gray-500 text-white rounded-xl hover:bg-gray-800 transition-colors"
                 >
                   <p className="text-xl">작성</p>
                 </button>
