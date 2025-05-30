@@ -22,7 +22,7 @@ export default function HomeHeader() {
   return (
     <header className="w-full py-4 px-6 flex justify-between items-center bg-transparent mb-20">
       {/* 로고 */}
-      <Link href="/">
+      <Link href="/" className="hover:scale-120 transition duration-500">
         <Image
           src="/Piction_Logo1.png"
           alt="Piction Logo"

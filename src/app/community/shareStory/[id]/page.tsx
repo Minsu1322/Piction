@@ -191,8 +191,8 @@ const DetailShareStory = () => {
             )}
 
             {/* 하단에 오버레이된 제목 */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-              <h1 className="text-xl font-bold text-white">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">
+              <h1 className="text-2xl font-bold text-white">
                 {shareStory.story_title}
               </h1>
             </div>

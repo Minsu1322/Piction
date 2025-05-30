@@ -304,7 +304,6 @@ export default function StoryGenerator() {
     <div className="w-full h-full">
       {/* 스토리 영역 (상단단) */}
       <div className="overflow-y-auto scrollbar-hide px-30">
-        <h1 className="text-2xl font-bold mb-4">📖이야기 진행중</h1>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="story-content mb-6">
           <p className="whitespace-pre-wrap text-lg">{story}</p>
