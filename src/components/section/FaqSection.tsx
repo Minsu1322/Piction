@@ -35,7 +35,7 @@ export default function FaqSection() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl font-base text-center mb-12 text-white"
+          className="text-4xl font-base text-center mb-12 text-white font-hallym-700"
         >
           자주 묻는 질문
         </motion.h2>

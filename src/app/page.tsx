@@ -15,13 +15,13 @@ export default function Home() {
           <HomePreset />
         </div>
       </div>
-      <div className="w-full max-h-60 bg-[#EDF2FF] z-99 flex justify-center pt-8">
+      <div className="w-full max-h-80 bg-[#EDF2FF] z-99 flex justify-center pt-48">
         <Image
           src="/HomeDotLine.png"
           alt="Home Dot Line"
-          width={10} // 너비
-          height={10} // 높이
-          style={{ height: "auto" }} // 비율 유지
+          width={4} // 너비
+          height={5} // 높이
+          style={{ width: "auto", height: "auto" }} // 비율 유지
         />
       </div>
       {/* 나머지 콘텐츠 */}

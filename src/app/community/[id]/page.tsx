@@ -18,7 +18,7 @@ export default function PostDetail() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
 
-  // New states for likes
+  // 좋아요
   const [likeCount, setLikeCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
@@ -318,7 +318,7 @@ export default function PostDetail() {
                 />
                 <button
                   onClick={handleCommentSubmit}
-                  className="w-28 flex items-center justify-center bg-gray-500 text-white rounded-xl hover:bg-gray-800 transition-colors"
+                  className="w-28 cursor-pointer flex items-center justify-center bg-gray-500 text-white rounded-xl hover:bg-gray-800 transition-colors"
                 >
                   <p className="text-xl">작성</p>
                 </button>

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://piction.vercel.app/
+
+# Sitemaps
+Sitemap: https://piction.vercel.app/sitemap.xml

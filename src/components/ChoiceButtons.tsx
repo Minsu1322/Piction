@@ -18,7 +18,7 @@ export default function ChoiceButtons({
           <button
             key={index}
             onClick={() => onSelect(choice)}
-            className="bg-white text-black cursor-pointer flex-1 py-20 px-6 rounded-xl text-lg shadow hover:opacity-75 hover:text-[#385DD9] transition active:scale-[0.98]"
+            className="bg-white text-black cursor-pointer flex-1 py-14 px-4 rounded-xl text-lg shadow hover:opacity-75 hover:text-[#385DD9] transition active:scale-[0.98]"
           >
             {choiceText}
           </button>

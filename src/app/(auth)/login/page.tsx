@@ -56,7 +56,7 @@ export default function Login() {
             className="flex items-center cursor-pointer justify-center gap-3 w-full py-3 rounded-xl text-gray-700 font-medium transition-all duration-300 bg-white border border-gray-300 hover:bg-gray-50"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
               width="24"
               height="24"
@@ -88,7 +88,7 @@ export default function Login() {
         <div className="text-center p-6">
           <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -113,7 +113,7 @@ export default function Login() {
         <div className="text-center p-6">
           <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -138,7 +138,7 @@ export default function Login() {
         <div className="text-center p-6">
           <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
