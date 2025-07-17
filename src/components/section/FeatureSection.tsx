@@ -33,7 +33,7 @@ export default function FeatureSection() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full p-4"
+                  className="object-cover w-full h-full"
                 />
               </motion.div>
             </div>
@@ -82,7 +82,7 @@ export default function FeatureSection() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full p-4"
+                  className="object-cover w-full h-full"
                 />
               </motion.div>
             </div>
@@ -131,7 +131,7 @@ export default function FeatureSection() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full p-4"
+                  className="object-cover w-full h-full"
                 />
               </motion.div>
             </div>
@@ -180,7 +180,7 @@ export default function FeatureSection() {
                   loop
                   muted
                   playsInline
-                  className="object-cover w-full h-full p-4"
+                  className="object-cover w-full h-full"
                 />
               </motion.div>
             </div>
