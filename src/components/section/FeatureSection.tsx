@@ -27,12 +27,13 @@ export default function FeatureSection() {
                 transition={{ duration: 0.5 }}
                 className="relative bg-white rounded-2xl h-80 flex items-center justify-center shadow-xl overflow-hidden"
               >
-                <Image
-                  src="/featureSection_img01.png"
-                  alt="Feature Image 1"
-                  fill
-                  className="object-cover p-4"
-                  priority
+                <video
+                  src="/sequence1.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover w-full h-full p-4"
                 />
               </motion.div>
             </div>
@@ -75,7 +76,14 @@ export default function FeatureSection() {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-2xl h-80 flex items-center justify-center shadow-xl overflow-hidden"
               >
-                <p className="text-gray-700 font-bold text-xl">이미지 2</p>
+                <video
+                  src="/sequence1-2.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover w-full h-full p-4"
+                />
               </motion.div>
             </div>
 
@@ -117,7 +125,14 @@ export default function FeatureSection() {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-2xl h-80 flex items-center justify-center shadow-xl overflow-hidden"
               >
-                <p className="text-gray-700 font-bold text-xl">이미지 3</p>
+                <video
+                  src="/sequence1-3.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover w-full h-full p-4"
+                />
               </motion.div>
             </div>
 
@@ -159,7 +174,14 @@ export default function FeatureSection() {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-2xl h-80 flex items-center justify-center shadow-xl overflow-hidden"
               >
-                <p className="text-gray-700 font-bold text-xl">이미지 4</p>
+                <video
+                  src="/sequence1-4.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover w-full h-full p-4"
+                />
               </motion.div>
             </div>
 

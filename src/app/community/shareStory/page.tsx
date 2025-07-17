@@ -27,7 +27,7 @@ export default function ShareStoryPage() {
       setLoading(true);
       try {
         const response = await fetch(
-          `/api/shareStory?page=${currentPage}&limit=${POSTS_PER_PAGE}`
+          `/api/shareStory?page=${currentPage}&limit=${POSTS_PER_PAGE}&sort=${sortOption}`
         );
         const data = await response.json();
 
@@ -47,22 +47,8 @@ export default function ShareStoryPage() {
     };
 
     fetchPosts();
-  }, [currentPage]);
+  }, [currentPage, sortOption]);
 
-  const filteredAndSortedPosts = [...posts]
-    .filter((post) => {
-      return sortGenre === "전체" || post.genre?.includes(sortGenre);
-    })
-    .sort((a, b) => {
-      if (sortOption === "latest") {
-        return (
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-      } else if (sortOption === "recommend") {
-        return b.likes_count - a.likes_count;
-      }
-      return 0;
-    });
   const genres = ["전체", "로맨스", "판타지", "스릴러", "액션", "힐링"];
 
   if (loading) {
@@ -128,7 +114,7 @@ export default function ShareStoryPage() {
 
         {/* 이야기 카드 리스트 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredAndSortedPosts.map((post) => (
+          {posts.map((post) => (
             <Link
               href={`/community/shareStory/${post.id}`}
               key={post.id}

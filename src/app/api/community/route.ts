@@ -5,18 +5,30 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1", 10); // 기본값: 1
   const limit = parseInt(searchParams.get("limit") || "10", 10); // 기본값: 10
+  const sortOption = searchParams.get("sort") || "latest";
+
   const offset = (page - 1) * limit;
 
-  const { data: posts, error: postsError } = await supabase
+  let query = supabase
     .from("community")
-    .select("id, created_at, content, title")
-    .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1); // 페이지 범위
+    .select("id, created_at, content, title");
+
+  // 정렬 조건에 따른 처리
+  if (sortOption === "latest") {
+    // 최신순: created_at으로 정렬
+    query = query.order("created_at", { ascending: false });
+  } else {
+    // 추천순, 댓글순: 일단 모든 데이터를 가져와서 JS에서 정렬
+    query = query.order("created_at", { ascending: false });
+  }
+
+  const { data: posts, error: postsError } = await query;
 
   if (postsError) {
     return NextResponse.json({ error: postsError.message }, { status: 500 });
   }
 
+  // 모든 게시글에 댓글 수와 좋아요 수 추가
   const postsWithCommentAndLikesCount = await Promise.all(
     posts.map(async (post) => {
       const { count: commentCount, error: commentError } = await supabase
@@ -26,7 +38,6 @@ export async function GET(req: Request) {
 
       if (commentError) {
         console.error("댓글 수 조회 오류:", commentError);
-        return { ...post, comment_count: 0 };
       }
 
       const { count: likesCount, error: likeError } = await supabase
@@ -46,12 +57,22 @@ export async function GET(req: Request) {
     })
   );
 
-  const { count: totalCount } = await supabase
-    .from("community")
-    .select("id", { count: "exact", head: true });
+  // 정렬 옵션에 따른 정렬 수행
+  const sortedPosts = [...postsWithCommentAndLikesCount];
+
+  if (sortOption === "recommend") {
+    sortedPosts.sort((a, b) => b.likes_count - a.likes_count);
+  } else if (sortOption === "comment") {
+    sortedPosts.sort((a, b) => b.comment_count - a.comment_count);
+  }
+  // latest는 이미 DB에서 정렬됨
+
+  // 페이지네이션 적용
+  const paginatedPosts = sortedPosts.slice(offset, offset + limit);
+  const totalCount = sortedPosts.length;
 
   return NextResponse.json(
-    { posts: postsWithCommentAndLikesCount, totalCount },
+    { posts: paginatedPosts, totalCount },
     { status: 200 }
   );
 }

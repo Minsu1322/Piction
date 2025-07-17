@@ -5,12 +5,14 @@ import Spinner from "@/components/LoadingComponents/LoginLoading";
 import { Post } from "@/components/types/types";
 import { formatDate } from "@/utils/formData";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FiClock, FiThumbsUp, FiMessageSquare } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 
-const fetchPosts = async (page: number, limit: number) => {
-  const res = await fetch(`/api/community?page=${page}&limit=${limit}`);
+const fetchPosts = async (page: number, limit: number, sortOption: string) => {
+  const res = await fetch(
+    `/api/community?page=${page}&limit=${limit}&sort=${sortOption}`
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch posts");
@@ -34,12 +36,12 @@ export default function CommunityPage() {
     "latest" | "recommend" | "comment"
   >("latest");
 
-  const POSTS_PER_PAGE = 10;
+  const POSTS_PER_PAGE = 7;
 
-  // useQuery로 데이터 fetching
+  // useQuery로 데이터 fetching - sortOption 변경 시 자동 재실행
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["posts", currentPage, POSTS_PER_PAGE],
-    queryFn: () => fetchPosts(currentPage, POSTS_PER_PAGE),
+    queryKey: ["posts", currentPage, POSTS_PER_PAGE, sortOption],
+    queryFn: () => fetchPosts(currentPage, POSTS_PER_PAGE, sortOption),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -47,21 +49,11 @@ export default function CommunityPage() {
   const totalCount = data?.totalCount || 0;
   const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
 
-  //게시글 메모
-  const sortedPosts = useMemo(() => {
-    return [...posts].sort((a, b) => {
-      if (sortOption === "latest") {
-        return (
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-      } else if (sortOption === "recommend") {
-        return b.likes_count - a.likes_count;
-      } else if (sortOption === "comment") {
-        return b.comment_count - a.comment_count;
-      }
-      return 0;
-    });
-  }, [posts, sortOption]);
+  // 탭 변경 핸들러
+  const handleSortChange = (newSort: "latest" | "recommend" | "comment") => {
+    setSortOption(newSort);
+    setCurrentPage(1); // 정렬 변경 시 첫 페이지로 이동
+  };
 
   // 에러 처리
   if (isError) {
@@ -85,7 +77,7 @@ export default function CommunityPage() {
         {/* 정렬 옵션 버튼 */}
         <div className="flex pl-4 justify mb-4 gap-2">
           <button
-            onClick={() => setSortOption("latest")}
+            onClick={() => handleSortChange("latest")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "latest" ? "font-bold" : " text-gray-700"
             }`}
@@ -93,7 +85,7 @@ export default function CommunityPage() {
             • 최신순
           </button>
           <button
-            onClick={() => setSortOption("recommend")}
+            onClick={() => handleSortChange("recommend")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "recommend" ? "font-bold" : "0 text-gray-700"
             }`}
@@ -101,7 +93,7 @@ export default function CommunityPage() {
             • 추천순
           </button>
           <button
-            onClick={() => setSortOption("comment")}
+            onClick={() => handleSortChange("comment")}
             className={`px-3 py-1 cursor-pointer text-sm rounded-full ${
               sortOption === "comment" ? "font-bold" : " text-gray-700"
             }`}
@@ -129,7 +121,7 @@ export default function CommunityPage() {
       ) : (
         <div className="border-t rounded-2xl bg-white border-gray-100">
           {/* 게시글 목록 */}
-          {sortedPosts.map((post) => (
+          {posts.map((post) => (
             <Link
               key={post.id}
               href={`/community/${post.id}`}
